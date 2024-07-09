@@ -1,0 +1,38 @@
+.navbar {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 2rem;
+	position: fixed;
+}
+
+.navbar-logo {
+	width: 80%;
+}
+
+.navbar__links {
+	width: 30%;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	transition: 0.3s;
+}
+
+.navbar > a {
+	font-size: 1.5rem;
+	font-style: italic;
+	font-weight: 500;
+	margin-left: 2rem;
+}
+
+.navbar__links > a {
+	font-size: 1.3rem;
+	font-weight: 500;
+}
+
+.navbar a,
+.navbar__links a {
+	cursor: pointer;
+	text-decoration: none;
+}

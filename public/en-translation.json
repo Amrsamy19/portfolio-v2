@@ -1,0 +1,29 @@
+{
+	"navbar-links": {
+		"about-link": "About",
+		"projects-link": "Projects",
+		"contact-link": "Contact"
+	},
+	"home": {
+		"home-title": "Hi There! 👋🏻",
+		"home-name-char": "I'm",
+		"home-name": " Amr Samy",
+		"home-front": "Frontend Developer",
+		"home-back": "Backend Developer"
+	},
+	"about": {
+		"title": "About me",
+		"description": "I am a Front-End Web Developer born and raised in Cairo, Egypt. I graduated from Cairo University and have a serious passion for UI interactions, animations and creating intuitive and dynamic user experiences. I am a well-organised person, problem solver and cooperative person with high attention to detail. Fan of English literature and online gaming.",
+		"skills": "Skills"
+	},
+	"projects": {
+		"title": "Projects"
+	},
+	"contact": {
+		"title": "Come and talk with me 👋🏻",
+		"name": "Name",
+		"email": "Email",
+		"message": "Message",
+		"send": "Send Message"
+	}
+}

@@ -1,0 +1,68 @@
+.App {
+	width: 100%;
+	height: 100%;
+	transition: 0.5s;
+}
+
+.arabic__font {
+	font-family: "Amiri", serif;
+	font-weight: 500;
+}
+
+.english__font {
+	font-family: "Poppins", sans-serif;
+}
+
+.home__dark {
+	width: 100%;
+	height: 100%;
+	background-color: #0f0215;
+	color: white;
+	transition: 1s;
+}
+
+.home__light {
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	color: #3c0753;
+	transition: 1s;
+}
+
+.home__light .project__content {
+	border: 2px solid #3c0753;
+	padding: 1.5rem;
+}
+
+.home__dark .project__content {
+	border: 2px solid white;
+	padding: 1.5rem;
+}
+
+.home__light .navbar__links a:hover {
+	color: #db6db8;
+	transition: 0.3s;
+}
+
+.home__dark .navbar__links a:hover {
+	color: #db6db8;
+	transition: 0.3s;
+}
+
+.home__dark > .navbar > a,
+.home__dark > .navbar__links > a {
+	color: white;
+	text-decoration: none;
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+	color: inherit;
+}
+
+.home__light .navbar > a,
+.home__light .navbar__links > a {
+	color: #3c0753;
+}

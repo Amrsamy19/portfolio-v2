@@ -1,0 +1,42 @@
+.projects__section {
+	height: 100vh;
+	padding-top: 6rem;
+}
+
+.projects__title {
+	width: 100%;
+	text-align: center;
+	font-style: italic;
+	font-weight: 400;
+	margin-bottom: 1.5rem;
+}
+
+.project__body__title {
+	text-align: center;
+	font-weight: 600;
+	font-style: italic;
+}
+
+.projects__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	align-items: center;
+	justify-content: center;
+	height: 70%;
+	margin: 0 2rem;
+	gap: 1rem;
+}
+
+.project__content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-evenly;
+	width: fit-content;
+	height: 100%;
+	border-radius: 20px;
+}
+
+.project__content > img{
+	width: 100%;
+}
