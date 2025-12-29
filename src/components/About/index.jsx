@@ -5,8 +5,12 @@ import {
   Css3Original,
   JavascriptOriginal,
   ReactOriginal,
-  TypescriptOriginal,
   Html5Original,
+  JavaOriginal,
+  CplusplusOriginal,
+  PythonOriginal,
+  COriginal,
+  KotlinOriginal,
 } from "devicons-react";
 import ProfilePic from "../../assets/me-about.jpeg";
 import "./index.css";
@@ -26,16 +30,32 @@ const Technologies = (props) => {
           <label className="english__font">Javascript</label>
         </div>
         <div className="skill__box">
-          <TypescriptOriginal size={60} aria-label="Typescript" />
-          <label className="english__font">Typescript</label>
-        </div>
-        <div className="skill__box">
           <Html5Original size={60} aria-label="Html" />
           <label className="english__font">Html</label>
         </div>
         <div className="skill__box">
           <Css3Original size={60} aria-label="Css" />
           <label className="english__font">Css</label>
+        </div>
+        <div className="skill__box">
+          <JavaOriginal size={60} aria-label="Java" />
+          <label className="english__font">Java</label>
+        </div>
+        <div className="skill__box">
+          <COriginal size={60} aria-label="C" />
+          <label className="english__font">C</label>
+        </div>
+        <div className="skill__box">
+          <CplusplusOriginal size={60} aria-label="C++" />
+          <label className="english__font">C++</label>
+        </div>
+        <div className="skill__box">
+          <PythonOriginal size={60} aria-label="Python" />
+          <label className="english__font">Python</label>
+        </div>
+        <div className="skill__box">
+          <KotlinOriginal size={60} aria-label="Kotlin" />
+          <label className="english__font">Kotlin</label>
         </div>
       </div>
     </div>
