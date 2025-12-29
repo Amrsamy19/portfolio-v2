@@ -1,24 +1,12 @@
 /* eslint-disable react/prop-types */
 import "./index.css";
 import { TypeAnimation } from "react-type-animation";
-import { ThemeToggle, LanguageButton } from "../Toggle";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Email } from "@mui/icons-material";
 
-export const Home = (props) => {
-  const { t, i18n } = useTranslation();
-  const [seed, setSeed] = useState(1);
-
-  const reset = () => {
-    setSeed(Math.random());
-  };
-
-  const handleChange = () => {
-    const newLang = i18n.language === "en" ? "ar" : "en";
-    i18n.changeLanguage(newLang);
-    localStorage.setItem("lang", newLang);
-  };
+// Destructure setActiveSection from the props passed by App.jsx
+export const Home = ({ setActiveSection }) => {
+  const { t } = useTranslation();
 
   return (
     <section id="home" className="home__section">
@@ -35,17 +23,23 @@ export const Home = (props) => {
             speed={50}
             className="type-animation"
             repeat={Infinity}
-            key={seed}
           />
         </div>
 
         <div className="home__cta-buttons">
-          <a href="#projects" className="cta-btn primary-btn">
+          <button
+            onClick={() => setActiveSection("projects")}
+            className="cta-btn primary-btn"
+          >
             {t("projects.title")} &rarr;
-          </a>
-          <a href="#contact" className="cta-btn secondary-btn">
+          </button>
+
+          <button
+            onClick={() => setActiveSection("contact")}
+            className="cta-btn secondary-btn"
+          >
             {t("contact.title")} <Email sx={{ ml: 1, fontSize: 20 }} />
-          </a>
+          </button>
         </div>
       </div>
     </section>

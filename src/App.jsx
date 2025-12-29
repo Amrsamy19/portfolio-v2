@@ -16,7 +16,13 @@ export const App = () => {
   const renderActiveComponent = () => {
     switch (activeSection) {
       case "home":
-        return <Home darkMode={darkMode} toggleDarkMode={toggleDarkMode} />;
+        return (
+          <Home
+            darkMode={darkMode}
+            toggleDarkMode={toggleDarkMode}
+            setActiveSection={setActiveSection}
+          />
+        );
       case "about":
         return <About />;
       case "projects":

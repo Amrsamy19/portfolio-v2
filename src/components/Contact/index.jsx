@@ -100,7 +100,13 @@ export const Contact = ({ darkMode }) => {
             </ColorButton>
           </Link>
 
-          <Link href={CV} target="_blank" rel="noopener">
+          <Link
+            href={CV}
+            download="Marwan_Ragab_CV.pdf"
+            className="contact__social-btn"
+            target="_blank"
+            rel="noopener"
+          >
             <ColorButton startIcon={<Person />} fullWidth>
               Download CV
             </ColorButton>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Close } from "@mui/icons-material";
+/* Added GitHub to the imports below */
+import { ChevronLeft, ChevronRight, Close, GitHub } from "@mui/icons-material";
 
 export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
   const [[imageIndex, direction], setImageIndex] = useState([0, 0]);
@@ -16,7 +17,7 @@ export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
   const nextImage = () => paginate(1);
   const prevImage = () => paginate(-1);
 
-  // 🎯 Keyboard controls
+  // Keyboard controls
   useEffect(() => {
     const handler = (e) => {
       if (e.key === "Escape") onClose();
@@ -25,9 +26,9 @@ export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [imageIndex]); // Include imageIndex in dependencies
+  }, [imageIndex, onClose]);
 
-  // Prevent body scroll when modal is open
+  // Prevent body scroll
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -61,7 +62,6 @@ export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
       >
         <motion.div
           layoutId={`card-${project.title}`}
@@ -70,7 +70,6 @@ export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ type: "spring", damping: 25, stiffness: 300 }}
         >
           {/* Image Carousel */}
           <div className="modal__image-container">
@@ -78,114 +77,70 @@ export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
               <motion.img
                 key={imageIndex}
                 src={images[imageIndex]}
-                alt={`${project.title} - Image ${imageIndex + 1}`}
+                alt={`${project.title}`}
                 className="modal__image"
                 custom={direction}
                 variants={imageVariants}
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.25 },
-                  scale: { duration: 0.25 },
-                }}
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.5}
-                onDragEnd={(e, { offset, velocity }) => {
-                  const swipe = Math.abs(offset.x) * velocity.x;
-                  if (swipe < -10000) paginate(1);
-                  else if (swipe > 10000) paginate(-1);
-                }}
               />
             </AnimatePresence>
 
-            {/* Image Counter */}
             {images.length > 1 && (
-              <motion.div
-                className="modal__counter"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
+              <div className="modal__counter">
                 {imageIndex + 1} / {images.length}
-              </motion.div>
+              </div>
             )}
 
-            {/* Navigation Buttons */}
             {images.length > 1 && (
               <>
-                <motion.button
-                  className="modal__nav prev"
-                  onClick={prevImage}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
+                <button className="modal__nav prev" onClick={prevImage}>
                   <ChevronLeft />
-                </motion.button>
-                <motion.button
-                  className="modal__nav next"
-                  onClick={nextImage}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
+                </button>
+                <button className="modal__nav next" onClick={nextImage}>
                   <ChevronRight />
-                </motion.button>
+                </button>
               </>
             )}
           </div>
 
-          {/* Close Button */}
-          <motion.button
-            className="modal__close"
-            onClick={onClose}
-            whileHover={{ scale: 1.1, rotate: 90 }}
-            whileTap={{ scale: 0.95 }}
-          >
+          <button className="modal__close" onClick={onClose}>
             <Close />
-          </motion.button>
+          </button>
 
-          {/* Project Details */}
-          <motion.div
-            className="modal__details"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
+          <div className="modal__details">
             <h2>{project.title}</h2>
             <p>{project.description}</p>
-            <div className="modal__tech-tags">
-              {project.technologies.map((tech, index) => (
-                <motion.span
-                  key={tech}
-                  className="tech-tag"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3 + index * 0.05 }}
+            <div>
+              <div className="modal__tech-tags">
+                {project.technologies.map((tech) => (
+                  <span key={tech} className="tech-tag">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+              {/* Link Section */}
+              <div className="modal__links" style={{ marginTop: "1.5rem" }}>
+                <a
+                  href={project.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  {tech}
-                </motion.span>
-              ))}
+                  <GitHub sx={{ fontSize: 30, color: "#db6db8" }} />
+                </a>
+              </div>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Project Navigation Hint */}
-          <motion.div
-            className="modal__nav-hint"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            {/* Add onClick and change to a clickable element or button */}
+          <div className="modal__nav-hint">
             <span onClick={onPrev} style={{ cursor: "pointer" }}>
               ← Previous Project
             </span>
-
             <span onClick={onNext} style={{ cursor: "pointer" }}>
               Next Project →
             </span>
-          </motion.div>
+          </div>
         </motion.div>
       </motion.div>
     </AnimatePresence>

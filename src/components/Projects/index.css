@@ -280,6 +280,12 @@
   padding: 2rem 2rem 1.5rem;
 }
 
+.modal__details > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .modal__details h2 {
   font-size: 1.75rem;
   font-weight: 700;
