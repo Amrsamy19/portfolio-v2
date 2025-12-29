@@ -2,9 +2,7 @@
 import "./index.css";
 import { TypeAnimation } from "react-type-animation";
 import { useTranslation } from "react-i18next";
-import { Email } from "@mui/icons-material";
 
-// Destructure setActiveSection from the props passed by App.jsx
 export const Home = ({ setActiveSection }) => {
   const { t } = useTranslation();
 
@@ -38,7 +36,7 @@ export const Home = ({ setActiveSection }) => {
             onClick={() => setActiveSection("contact")}
             className="cta-btn secondary-btn"
           >
-            {t("contact.title")} <Email sx={{ ml: 1, fontSize: 20 }} />
+            {t("contact.title")}
           </button>
         </div>
       </div>
