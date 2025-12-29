@@ -1,76 +1,121 @@
 .about__section {
-	height: 100vh;
-	padding-top: 6rem;
+  min-height: 100vh;
+  padding: 6rem 2rem 2rem 2rem;
 }
 
 .about__title {
-	width: 100%;
-	text-align: center;
-	font-style: italic;
-	font-weight: 400;
+  width: 100%;
+  text-align: center;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .about__body-text {
-	text-align: justify;
+  text-align: justify;
+  line-height: 1.8;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
 }
 
 .about__grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	align-items: center;
-	justify-content: center;
-	height: 100%;
-	margin: 0 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  align-items: start;
+  justify-content: center;
+  gap: 3rem;
+  margin: 0 2rem;
 }
 
-.about__grid > img {
-	width: 60%;
-	height: 70%;
-	margin: 0 auto;
+.about__grid .about__img {
+  position: relative;
+  width: 80%;
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.about__grid .about__img > img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.about__grid .about__img:hover > img {
+  transform: scale(1.05);
 }
 
 .about__content {
-	display: flex;
-	flex-direction: column;
-	height: 80%;
-	justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .skills__grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
 }
 
 .skills__title {
-	width: 100%;
-	text-align: center;
-	font-weight: 400;
-	font-style: italic;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
 }
 
 .skill__box {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  text-align: center;
 }
 
-.home__light .skills__grid .skill__box > svg {
-	margin-bottom: 0.5rem;
-	padding: 1rem;
-	border: 2px solid #3c0753;
+.skill__box:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.home__dark .skills__grid .skill__box > svg {
-	margin: 0 auto;
-	padding: 1rem;
-	background-color: white;
+.skill__box label {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
+.skill__box > svg {
+  width: 50px;
+  height: 50px;
+  transition: transform 0.3s ease;
+}
 
+.skill__box:hover > svg {
+  transform: rotate(10deg) scale(1.1);
+}
+
+/* Specific styling overrides based on theme classes if needed, 
+   but generalized glassmorphism above usually works well for both.
+   Keeping specific color fixes below just in case. */
+
+.home__light .skills__grid .skill__box {
+  border: 1px solid rgba(60, 7, 83, 0.1);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.home__dark .skills__grid .skill__box {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}

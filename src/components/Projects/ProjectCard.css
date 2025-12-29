@@ -1,0 +1,130 @@
+.project__image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.project__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.project__content:hover .project__image {
+  transform: scale(1.05);
+}
+
+/* Navigation Buttons */
+.project__nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 2;
+  color: #1a1a1a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.home__dark .project__nav-btn {
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+}
+
+.project__content:hover .project__nav-btn {
+  opacity: 1;
+}
+
+.project__nav-btn--prev {
+  left: 10px;
+}
+
+.project__nav-btn--next {
+  right: 10px;
+}
+
+.project__nav-btn:hover {
+  background: rgba(219, 109, 184, 0.95);
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Dots Indicator */
+.project__dots {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.project__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.project__dot.active {
+  background: #db6db8;
+  border-color: #db6db8;
+  width: 24px;
+  border-radius: 4px;
+}
+
+.project__dot:hover {
+  border-color: #db6db8;
+  transform: scale(1.2);
+}
+
+/* Project Info */
+.project__info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+  z-index: 1;
+}
+
+.project__tech {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  margin: 0.5rem 0 0 0;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.home__dark .project__tech {
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+}

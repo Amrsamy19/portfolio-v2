@@ -1,68 +1,165 @@
+/* Glassmorphism Utility */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  border-radius: 20px;
+}
+
+.glass-card-light {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  border-radius: 20px;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e0525;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #db6db8;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b54992;
+}
+
 .App {
-	width: 100%;
-	height: 100%;
-	transition: 0.5s;
+  width: 100%;
+  height: 100%;
+  transition: 0.5s;
 }
 
 .arabic__font {
-	font-family: "Amiri", serif;
-	font-weight: 500;
+  font-family: "Amiri", serif;
+  font-weight: 500;
+}
+
+.english__font main {
+  margin-left: 90px;
+  transition: margin 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.arabic__font main {
+  margin-right: 90px;
+  transition: margin 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .english__font {
-	font-family: "Poppins", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .home__dark {
-	width: 100%;
-	height: 100%;
-	background-color: #0f0215;
-	color: white;
-	transition: 1s;
+  width: 100%;
+  min-height: 100vh;
+  background: #050510;
+  color: white;
+  transition: 1s;
+  position: relative;
+  overflow: hidden;
+}
+
+.home__dark::before {
+  content: "";
+  position: absolute;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(
+    circle,
+    rgba(219, 109, 184, 0.15) 0%,
+    transparent 70%
+  );
+  top: -10vw;
+  left: -10vw;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
+  animation: blob-float 15s infinite alternate;
+}
+
+.home__dark::after {
+  content: "";
+  position: absolute;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, rgba(60, 7, 83, 0.2) 0%, transparent 70%);
+  bottom: -10vw;
+  right: -10vw;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
+  animation: blob-float 20s infinite alternate-reverse;
+}
+
+@keyframes blob-float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(10vw, 5vw) scale(1.1);
+  }
 }
 
 .home__light {
-	width: 100%;
-	height: 100%;
-	background-color: white;
-	color: #3c0753;
-	transition: 1s;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e2d1f0 100%);
+  color: #3c0753;
+  transition: 1s;
 }
 
 .home__light .project__content {
-	border: 2px solid #3c0753;
-	padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 1.5rem;
 }
 
 .home__dark .project__content {
-	border: 2px solid white;
-	padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
 }
 
 .home__light .navbar__links a:hover {
-	color: #db6db8;
-	transition: 0.3s;
+  color: #db6db8;
+  transition: 0.3s;
+  text-shadow: 0 0 10px rgba(219, 109, 184, 0.5);
 }
 
 .home__dark .navbar__links a:hover {
-	color: #db6db8;
-	transition: 0.3s;
+  color: #db6db8;
+  transition: 0.3s;
+  text-shadow: 0 0 10px rgba(219, 109, 184, 0.8);
 }
 
 .home__dark > .navbar > a,
 .home__dark > .navbar__links > a {
-	color: white;
-	text-decoration: none;
+  color: white;
+  text-decoration: none;
 }
 
 a,
 a:visited,
 a:hover,
 a:active {
-	color: inherit;
+  color: inherit;
+  text-decoration: none;
 }
 
 .home__light .navbar > a,
 .home__light .navbar__links > a {
-	color: #3c0753;
+  color: #3c0753;
 }

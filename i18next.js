@@ -1,8 +1,8 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import Arabic from "./public/ar-translation.json";
-import English from "./public/en-translation.json";
+import Arabic from "./src/translation/ar-translation.json";
+import English from "./src/translation/en-translation.json";
 
 i18n
 	.use(LanguageDetector)

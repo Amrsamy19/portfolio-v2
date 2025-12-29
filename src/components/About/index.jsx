@@ -88,7 +88,9 @@ export const About = () => {
 		<section id="about" className="about__section">
 			<h2 className="about__title">{t("about.title")}</h2>
 			<div className="about__grid">
-				<img src={ProfilePic} alt="profile" />
+				<div className="about__img">
+					<img src={ProfilePic} alt="profile" />
+				</div>
 				<div className="about__content">
 					<p className="about__body-text">{t("about.description")}</p>
 					<Technologies title={t("about.skills")} />

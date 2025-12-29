@@ -4,74 +4,50 @@ import { TypeAnimation } from "react-type-animation";
 import { ThemeToggle, LanguageButton } from "../Toggle";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Email } from "@mui/icons-material";
 
 export const Home = (props) => {
-	const { t, i18n } = useTranslation();
-	const [checked, setChecked] = useState(false);
-	const [seed, setSeed] = useState(1);
+  const { t, i18n } = useTranslation();
+  const [seed, setSeed] = useState(1);
 
-	const reset = () => {
-		setSeed(Math.random());
-	};
+  const reset = () => {
+    setSeed(Math.random());
+  };
 
-	const handleChange = () => {
-		setChecked(!checked);
-		i18n.changeLanguage(!checked ? "en" : "ar");
-		localStorage.setItem("lang", i18n.language);
-	};
+  const handleChange = () => {
+    const newLang = i18n.language === "en" ? "ar" : "en";
+    i18n.changeLanguage(newLang);
+    localStorage.setItem("lang", newLang);
+  };
 
-	return (
-		<section className="home__section">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				aria-hidden="true"
-				focusable="false"
-				viewBox="0 0 32 32"
-				preserveAspectRatio="xMidYMid meet"
-				className="iconify header-icon"
-				data-icon="la:laptop-code"
-				data-inline="false"
-			>
-				<path
-					fill="currentColor"
-					d="M5 6v13.563l-2.281 2.314A2.444 2.444 0 0 0 2 23.594A2.418 2.418 0 0 0 4.406 26h23.188A2.418 2.418 0 0 0 30 23.594a2.45 2.45 0 0 0-.719-1.719L27 19.562V6zm2 2h18v11H7zm9 1l-1.5 9H16l1.5-9zm-3.914 2l-1.719 2.068L10 13.5l.367.432L12.086 16l1.086-.863L11.81 13.5l1.36-1.637zm7.828 0l-1.086.863L20.19 13.5l-1.36 1.637l1.085.863l1.719-2.068L22 13.5l-.367-.432zM6.437 21h19.125l2.313 2.281a.464.464 0 0 1 .125.313a.386.386 0 0 1-.406.406H4.406A.386.386 0 0 1 4 23.594c0-.11.047-.234.125-.313z"
-				></path>
-			</svg>
-			<h1>{t("home.home-title")}</h1>
-			<h2>
-				{t("home.home-name-char")}
-				<span>{t("home.home-name")}</span>
-			</h2>
-			<TypeAnimation
-				sequence={[t("home.home-front"), 1000, t("home.home-back"), 1000]}
-				wrapper="span"
-				speed={50}
-				style={{
-					fontSize: "2rem",
-					display: "inline-block",
-					fontFamily: `${i18n.language === "ar" ? "Amiri" : "Poppins"}`,
-					fontWeight: "400",
-				}}
-				repeat={Infinity}
-				key={seed}
-			/>
-			<ThemeToggle
-				darkMode={props.darkMode}
-				toggleDarkMode={props.toggleDarkMode}
-			/>
-			<LanguageButton
-				darkMode={props.darkMode}
-				style={{
-					fontFamily: `${i18n.language === "ar" ? "Amiri" : "Poppins"}`,
-					fontWeight: "600",
-				}}
-				onClick={() => {
-					handleChange();
-					reset();
-				}}
-			>
-				{!checked ? "العربية" : "English"}
-			</LanguageButton>
-		</section>
-	);
+  return (
+    <section id="home" className="home__section">
+      <div className="home__content-container">
+        <p className="home__greeting">{t("home.home-title")}</p>
+        <h1 className="home__main-name">
+          {t("home.home-name-char")} <span>{t("home.home-name")}</span>
+        </h1>
+
+        <div className="home__type-wrap">
+          <TypeAnimation
+            sequence={[t("home.home-front"), 1000, t("home.home-back"), 1000]}
+            wrapper="span"
+            speed={50}
+            className="type-animation"
+            repeat={Infinity}
+            key={seed}
+          />
+        </div>
+
+        <div className="home__cta-buttons">
+          <a href="#projects" className="cta-btn primary-btn">
+            {t("projects.title")} &rarr;
+          </a>
+          <a href="#contact" className="cta-btn secondary-btn">
+            {t("contact.title")} <Email sx={{ ml: 1, fontSize: 20 }} />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
 };
