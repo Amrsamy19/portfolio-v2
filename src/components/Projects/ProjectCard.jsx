@@ -1,73 +1,102 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import "./ProjectCard.css";
 
-export const ProjectCard = ({ project }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+const swipeConfidenceThreshold = 10000;
 
-  const images = project.images || [project.imagePath];
+const swipePower = (offset, velocity) => Math.abs(offset) * velocity;
 
-  const nextImage = (e) => {
-    e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+export const ProjectCard = ({ project, onOpen }) => {
+  const [[imageIndex, direction], setImageIndex] = useState([0, 0]);
+  const images = project.images;
+
+  const paginate = (newDirection) => {
+    setImageIndex(([prev]) => [
+      (prev + newDirection + images.length) % images.length,
+      newDirection,
+    ]);
   };
 
-  const prevImage = (e) => {
-    e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  const variants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 200 : -200,
+      opacity: 0,
+    }),
+    center: { x: 0, opacity: 1 },
+    exit: (direction) => ({
+      x: direction < 0 ? 200 : -200,
+      opacity: 0,
+    }),
   };
 
   return (
-    <div className="project__content">
-      <div className="project__image-container">
-        <img
-          src={images[currentImageIndex]}
-          alt={project.title}
-          className="project__image"
-        />
+    <motion.article
+      layoutId={`card-${project.title}`}
+      className="project__content"
+      onClick={onOpen}
+      whileHover={{ y: -6 }}
+      transition={{ type: "spring", stiffness: 300, damping: 22 }}
+    >
+      {/* Image preview */}
+      <div className="project__carousel">
+        <AnimatePresence initial={false} custom={direction}>
+          <motion.img
+            key={imageIndex}
+            src={images[imageIndex]}
+            alt={`${project.title} preview`}
+            className="project__image"
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={(e, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x);
+              if (swipe < -swipeConfidenceThreshold) paginate(1);
+              if (swipe > swipeConfidenceThreshold) paginate(-1);
+            }}
+          />
+        </AnimatePresence>
 
         {images.length > 1 && (
           <>
             <button
-              className="project__nav-btn project__nav-btn--prev"
-              onClick={prevImage}
-              aria-label="Previous image"
+              className="project__nav-btn prev"
+              onClick={(e) => {
+                e.stopPropagation();
+                paginate(-1);
+              }}
             >
               <ChevronLeft />
             </button>
+
             <button
-              className="project__nav-btn project__nav-btn--next"
-              onClick={nextImage}
-              aria-label="Next image"
+              className="project__nav-btn next"
+              onClick={(e) => {
+                e.stopPropagation();
+                paginate(1);
+              }}
             >
               <ChevronRight />
             </button>
-
-            <div className="project__dots">
-              {images.map((_, index) => (
-                <button
-                  key={index}
-                  className={`project__dot ${
-                    index === currentImageIndex ? "active" : ""
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentImageIndex(index);
-                  }}
-                  aria-label={`Go to image ${index + 1}`}
-                />
-              ))}
-            </div>
           </>
         )}
       </div>
 
+      {/* Info */}
       <div className="project__info">
-        <p className="project__body__title english__font">{project.title}</p>
-        <p className="project__tech english__font">
-          {project.technologies.join(", ")}
-        </p>
+        <h3 className="project__title">{project.title}</h3>
+        <p className="project__description">{project.description}</p>
+        <p className="project__tech">{project.technologies.join(" • ")}</p>
       </div>
-    </div>
+    </motion.article>
   );
 };

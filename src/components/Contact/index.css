@@ -1,3 +1,5 @@
+/* Revised Contact Section CSS */
+
 .contact__section {
   min-height: 100vh;
   padding: 6rem 2rem 2rem 2rem;
@@ -18,10 +20,12 @@
 
 .contact__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  width: 80%;
-  max-width: 1200px;
+  /* Use 1fr for social buttons and 1.2fr for the form for balance */
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
   gap: 4rem;
+  width: 100%;
+  max-width: 1200px;
   padding: 3rem;
   border-radius: 30px;
   background: rgba(255, 255, 255, 0.02);
@@ -30,18 +34,18 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
-.home__light .contact__grid {
-  background: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
 .social__section {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
   gap: 2rem;
-  padding: 2rem;
+}
+
+/* Vertical stacking for the two columns of buttons */
+.social__section > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .contact__form {
@@ -49,15 +53,34 @@
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
-  padding: 2rem;
+  padding: 2.5rem;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-@media (max-width: 768px) {
+/* Mobile Responsive Layout */
+@media (max-width: 900px) {
   .contact__grid {
     grid-template-columns: 1fr;
-    width: 95%;
-    padding: 1.5rem;
+    padding: 2rem;
+    gap: 3rem;
+  }
+
+  .social__section {
+    flex-direction: row; /* Keep buttons in two columns if possible */
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .social__section {
+    flex-direction: column; /* Stack everything on very small screens */
+    align-items: center;
+  }
+
+  .social__section > div {
+    width: 100%;
+    align-items: center;
   }
 }

@@ -1,130 +1,225 @@
-.project__image-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
+/* =========================
+   Project Card - Creative Carousel
+========================= */
+
+.project__content {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
   overflow: hidden;
-  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transform: translateY(0);
+  will-change: transform;
+  transition: box-shadow 0.35s ease, transform 0.3s ease;
+  will-change: transform;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
+/* Magical gradient overlay on hover */
+.project__content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(219, 109, 184, 0.15),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 22px;
+}
+
+.project__content:hover::before {
+  opacity: 1;
+}
+
+.project__content:hover {
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* =========================
+   Carousel Container
+========================= */
+
+.project__carousel {
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+}
+
+/* Image positioning - absolute for AnimatePresence */
 .project__image {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  object-position: top;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
-.project__content:hover .project__image {
-  transform: scale(1.05);
-}
+/* =========================
+   Navigation Buttons
+========================= */
 
-/* Navigation Buttons */
 .project__nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: white;
+  z-index: 10;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+
   opacity: 0;
-  transition: all 0.3s ease;
-  z-index: 2;
-  color: #1a1a1a;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s ease;
+
+  width: 38px;
+  height: 38px;
 }
 
-.home__dark .project__nav-btn {
-  background: rgba(0, 0, 0, 0.8);
-  color: #ffffff;
-}
-
-.project__content:hover .project__nav-btn {
+.project__carousel:hover .project__nav-btn {
   opacity: 1;
 }
 
-.project__nav-btn--prev {
-  left: 10px;
-}
-
-.project__nav-btn--next {
-  right: 10px;
-}
-
 .project__nav-btn:hover {
-  background: rgba(219, 109, 184, 0.95);
-  color: white;
+  background: rgba(0, 0, 0, 0.85);
   transform: translateY(-50%) scale(1.1);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Dots Indicator */
-.project__dots {
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  z-index: 2;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 6px 12px;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
+.project__nav-btn:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
-.project__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
+.project__nav-btn.prev {
+  left: 0.75rem;
 }
 
-.project__dot.active {
-  background: #db6db8;
-  border-color: #db6db8;
-  width: 24px;
-  border-radius: 4px;
+.project__nav-btn.next {
+  right: 0.75rem;
 }
 
-.project__dot:hover {
-  border-color: #db6db8;
-  transform: scale(1.2);
+.project__nav-btn svg {
+  font-size: 1.5rem;
 }
 
-/* Project Info */
-.project__info {
+/* =========================
+   Image Indicators (Dots)
+========================= */
+
+.project__carousel::after {
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 1rem;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
-  z-index: 1;
+  height: 60px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* =========================
+   Card Info Section
+========================= */
+
+.project__info {
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 18, 26, 0.5),
+    rgba(18, 18, 26, 0.8)
+  );
+}
+
+.project__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+  transition: color 0.2s ease;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.project__content:hover .project__title {
+  color: #db6db8;
+}
+
+.project__description {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #f0f0f0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 .project__tech {
-  padding: 0.75rem 1rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  opacity: 1;
-  background: rgba(255, 255, 255, 0.95);
-  color: #1a1a1a;
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  margin: 0.5rem 0 0 0;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 0.8rem;
+  color: #db6db8;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  opacity: 0.9;
 }
 
-.home__dark .project__tech {
-  background: rgba(0, 0, 0, 0.75);
-  color: #ffffff;
+/* =========================
+   Responsive Adjustments
+========================= */
+
+@media (max-width: 600px) {
+  .project__carousel {
+    height: 220px;
+  }
+
+  .project__nav-btn {
+    width: 34px;
+    height: 34px;
+    padding: 0.4rem;
+  }
+
+  .project__nav-btn svg {
+    font-size: 1.3rem;
+  }
+
+  .project__nav-btn.prev {
+    left: 0.5rem;
+  }
+
+  .project__nav-btn.next {
+    right: 0.5rem;
+  }
+}
+
+@media (hover: none) {
+  /* Always show navigation on touch devices */
+  .project__nav-btn {
+    opacity: 0.8;
+  }
 }

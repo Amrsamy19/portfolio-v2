@@ -1,147 +1,442 @@
+/* =========================
+   Projects Section
+========================= */
+
 .projects__section {
+  width: 100%;
   min-height: 100vh;
-  padding: 2rem 0;
+  padding: 4rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  position: relative;
 }
 
 .projects__title {
   width: 100%;
   text-align: center;
   font-style: italic;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  font-size: 2.5rem;
-  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-weight: 800;
+  margin-bottom: 4rem;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #db6db8 40%,
+    #9333ea 70%,
+    #db6db8 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 5s ease infinite;
+  position: relative;
+  letter-spacing: 1px;
 }
 
-.project__body__title {
-  text-align: center;
-  font-weight: 700;
-  font-style: italic;
-  font-size: 1.2rem;
-  margin: 1rem 0 0.5rem 0;
-  color: inherit;
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
-/* Carousel Container */
-.projects__carousel-container {
+.projects__title::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #db6db8, transparent);
+  border-radius: 2px;
+}
+
+/* =========================
+   Projects Grid - Creative Layout
+========================= */
+
+.projects__grid {
+  width: 100%;
+  max-width: 1400px;
+  padding: 0 2rem;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 3rem 2.5rem;
+  perspective: 1000px;
+}
+
+@media (min-width: 768px) {
+  .projects__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .projects__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* =========================
+   Modal Backdrop
+========================= */
+
+.modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 1000;
+  padding: 1rem;
+}
+
+/* =========================
+   Modal Content
+========================= */
+
+.modal__content {
+  position: relative;
+  width: min(92vw, 920px);
+  max-height: 92vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background: rgba(18, 18, 26, 0.95);
+  border-radius: 24px;
+
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.8),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+
+  color: white;
+
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for modal */
+.modal__content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal__content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0 24px 24px 0;
+}
+
+.modal__content::-webkit-scrollbar-thumb {
+  background: rgba(219, 109, 184, 0.4);
+  border-radius: 4px;
+}
+
+.modal__content::-webkit-scrollbar-thumb:hover {
+  background: rgba(219, 109, 184, 0.6);
+}
+
+/* =========================
+   Modal Image Container
+========================= */
+
+.modal__image-container {
   position: relative;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 80px;
-}
-
-.projects__carousel {
+  height: clamp(280px, 55vh, 520px);
   overflow: hidden;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+}
+
+.modal__image {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
-.projects__carousel-track {
-  display: flex;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+/* Image Counter */
+.modal__counter {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.projects__carousel-slide {
-  min-width: 100%;
-  flex-shrink: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 1rem;
-}
+/* =========================
+   Modal Navigation & Controls
+========================= */
 
-/* Carousel Navigation Buttons */
-.carousel__nav-btn {
+.modal__nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(219, 109, 184, 0.9);
-  border: none;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  padding: 0.7rem;
+  cursor: pointer;
+  color: white;
+  z-index: 10;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
-  color: white;
-  box-shadow: 0 8px 24px rgba(219, 109, 184, 0.4);
+
+  transition: all 0.25s ease;
+
+  width: 44px;
+  height: 44px;
 }
 
-.carousel__nav-btn:hover {
-  background: rgba(219, 109, 184, 1);
+.modal__nav:hover {
+  background: rgba(0, 0, 0, 0.9);
   transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 12px 32px rgba(219, 109, 184, 0.6);
+  border-color: rgba(219, 109, 184, 0.5);
 }
 
-.carousel__nav-btn--prev {
-  left: 10px;
+.modal__nav:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
-.carousel__nav-btn--next {
-  right: 10px;
+.modal__nav.prev {
+  left: 1rem;
 }
 
-.carousel__nav-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+.modal__nav.next {
+  right: 1rem;
 }
 
-/* Carousel Indicators */
-.carousel__indicators {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 2rem;
+.modal__nav svg {
+  font-size: 1.8rem;
 }
 
-.carousel__indicator {
-  width: 12px;
-  height: 12px;
+.modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  border: 2px solid rgba(219, 109, 184, 0.5);
-  background: transparent;
+  color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
+  padding: 0.6rem;
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.25s ease;
+
+  width: 44px;
+  height: 44px;
 }
 
-.carousel__indicator.active {
-  background: #db6db8;
-  border-color: #db6db8;
-  width: 40px;
-  border-radius: 6px;
+.modal__close:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1) rotate(90deg);
+  border-color: rgba(255, 99, 99, 0.5);
 }
 
-.carousel__indicator:hover {
-  border-color: #db6db8;
-  transform: scale(1.2);
+.modal__close svg {
+  font-size: 1.5rem;
 }
 
-/* Project Card in Carousel */
-.project__content {
-  width: 100%;
-  max-width: 800px;
-  height: 500px;
+/* =========================
+   Modal Details
+========================= */
+
+.modal__details {
+  padding: 2rem 2rem 1.5rem;
+}
+
+.modal__details h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #ffffff, #db6db8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.modal__details p {
+  opacity: 0.9;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  font-size: 1rem;
+  color: #e0e0e0;
+}
+
+.modal__tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tech-tag {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  background: rgba(219, 109, 184, 0.15);
+  border: 1px solid rgba(219, 109, 184, 0.3);
   border-radius: 20px;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  animation: fadeInUp 0.6s ease-out backwards;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #db6db8;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
 }
+
+.tech-tag:hover {
+  background: rgba(219, 109, 184, 0.25);
+  border-color: rgba(219, 109, 184, 0.5);
+  transform: translateY(-2px);
+}
+
+/* =========================
+   Project Navigation Hint
+========================= */
+
+.modal__nav-hint {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem 1.5rem;
+  font-size: 0.8rem;
+  opacity: 0.5;
+  color: #b0b0b0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.modal__nav-hint span {
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.modal__nav-hint span:hover {
+  opacity: 1;
+  color: #db6db8;
+}
+
+/* =========================
+   Responsive Design
+========================= */
+
+@media (max-width: 600px) {
+  .projects__title {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+
+  .projects__grid {
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .modal__content {
+    border-radius: 16px;
+  }
+
+  .modal__image-container {
+    height: clamp(220px, 45vh, 380px);
+  }
+
+  .modal__counter {
+    bottom: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  .modal__nav {
+    width: 38px;
+    height: 38px;
+    padding: 0.5rem;
+  }
+
+  .modal__nav svg {
+    font-size: 1.5rem;
+  }
+
+  .modal__nav.prev {
+    left: 0.5rem;
+  }
+
+  .modal__nav.next {
+    right: 0.5rem;
+  }
+
+  .modal__close {
+    width: 38px;
+    height: 38px;
+    padding: 0.5rem;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .modal__close svg {
+    font-size: 1.3rem;
+  }
+
+  .modal__details {
+    padding: 1.5rem 1.5rem 1.25rem;
+  }
+
+  .modal__details h2 {
+    font-size: 1.4rem;
+  }
+
+  .modal__nav-hint {
+    padding: 0.75rem 1.5rem 1.25rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media (hover: none) {
+  /* Ensure controls are always visible on touch devices */
+  .modal__nav,
+  .modal__close {
+    opacity: 0.9;
+  }
+}
+
+/* =========================
+   Animations - Creative Entrance
+========================= */
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px); /* Reduced from 40px for a subtler entrance */
   }
   to {
     opacity: 1;
@@ -149,68 +444,49 @@
   }
 }
 
+@keyframes floatAnimation {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.projects__grid > * {
+  animation: fadeInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+.projects__grid > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.projects__grid > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.projects__grid > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.projects__grid > *:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.projects__grid > *:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.projects__grid > *:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.projects__grid > *:nth-child(7) {
+  animation-delay: 0.7s;
+}
+.projects__grid > *:nth-child(8) {
+  animation-delay: 0.8s;
+}
+.projects__grid > *:nth-child(9) {
+  animation-delay: 0.9s;
+}
+
+/* Subtle float on hover */
 .project__content:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 30px 80px rgba(219, 109, 184, 0.4);
-}
-
-.project__content::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(219, 109, 184, 0.1) 0%,
-    transparent 50%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.project__content:hover::before {
-  opacity: 1;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .projects__carousel-container {
-    padding: 0 60px;
-  }
-
-  .carousel__nav-btn {
-    width: 50px;
-    height: 50px;
-  }
-
-  .project__content {
-    height: 400px;
-  }
-}
-
-@media (max-width: 600px) {
-  .projects__carousel-container {
-    padding: 0 50px;
-  }
-
-  .carousel__nav-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-  .carousel__nav-btn--prev {
-    left: 5px;
-  }
-
-  .carousel__nav-btn--next {
-    right: 5px;
-  }
-
-  .project__content {
-    height: 350px;
-  }
+  animation: floatAnimation 3s ease-in-out forwards;
 }

@@ -1,75 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { LayoutGroup } from "framer-motion";
 import "./index.css";
 import { PROJECTS } from "./data";
 import { ProjectCard } from "./ProjectCard";
+import { ProjectModal } from "./ProjectModal";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 
 export const Projects = () => {
   const { t } = useTranslation();
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % PROJECTS.length);
-  };
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (activeIndex === null) return;
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + PROJECTS.length) % PROJECTS.length);
-  };
+      if (e.key === "Escape") setActiveIndex(null);
+      if (e.key === "ArrowRight")
+        setActiveIndex((i) => (i + 1) % PROJECTS.length);
+      if (e.key === "ArrowLeft")
+        setActiveIndex((i) => (i - 1 + PROJECTS.length) % PROJECTS.length);
+    };
 
-  const goToSlide = (index) => {
-    setCurrentSlide(index);
-  };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeIndex]);
 
   return (
     <section id="projects" className="projects__section">
       <h2 className="projects__title">{t("projects.title")}</h2>
 
-      <div className="projects__carousel-container">
-        <button
-          className="carousel__nav-btn carousel__nav-btn--prev"
-          onClick={prevSlide}
-          aria-label="Previous project"
-        >
-          <ChevronLeft sx={{ fontSize: 32 }} />
-        </button>
-
-        <div className="projects__carousel">
-          <div
-            className="projects__carousel-track"
-            style={{
-              transform: `translateX(-${currentSlide * 100}%)`,
-            }}
-          >
-            {PROJECTS.map((project, index) => (
-              <div key={project.title} className="projects__carousel-slide">
-                <ProjectCard project={project} />
-              </div>
-            ))}
-          </div>
+      <LayoutGroup>
+        <div className="projects__grid">
+          {PROJECTS.map((project, index) => (
+            <ProjectCard
+              key={project.title}
+              project={project}
+              index={index}
+              onOpen={() => setActiveIndex(index)}
+            />
+          ))}
         </div>
 
-        <button
-          className="carousel__nav-btn carousel__nav-btn--next"
-          onClick={nextSlide}
-          aria-label="Next project"
-        >
-          <ChevronRight sx={{ fontSize: 32 }} />
-        </button>
-      </div>
-
-      <div className="carousel__indicators">
-        {PROJECTS.map((_, index) => (
-          <button
-            key={index}
-            className={`carousel__indicator ${
-              index === currentSlide ? "active" : ""
-            }`}
-            onClick={() => goToSlide(index)}
-            aria-label={`Go to project ${index + 1}`}
+        {activeIndex !== null && (
+          <ProjectModal
+            project={PROJECTS[activeIndex]}
+            onClose={() => setActiveIndex(null)}
+            onNext={() => setActiveIndex((i) => (i + 1) % PROJECTS.length)}
+            onPrev={() =>
+              setActiveIndex((i) => (i - 1 + PROJECTS.length) % PROJECTS.length)
+            }
           />
-        ))}
-      </div>
+        )}
+      </LayoutGroup>
     </section>
   );
 };
