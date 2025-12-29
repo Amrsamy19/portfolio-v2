@@ -1,8 +1,10 @@
-/* Revised Contact Section CSS */
+/* =========================
+   Contact Section - Refined
+========================= */
 
 .contact__section {
   min-height: 100vh;
-  padding: 6rem 2rem 2rem 2rem;
+  padding: 6rem 2rem 4rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,13 +22,13 @@
 
 .contact__grid {
   display: grid;
-  /* Use 1fr for social buttons and 1.2fr for the form for balance */
+  /* Desktop: Balanced side-by-side */
   grid-template-columns: 1fr 1.2fr;
   align-items: center;
   gap: 4rem;
   width: 100%;
-  max-width: 1200px;
-  padding: 3rem;
+  max-width: 1100px; /* Narrowed slightly for 3-button balance */
+  padding: 3.5rem;
   border-radius: 30px;
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(10px);
@@ -34,19 +36,28 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
+/* =========================
+   Social Section (3 Buttons)
+========================= */
+
 .social__section {
   display: flex;
-  flex-direction: row;
+  flex-direction: column; /* Stack buttons in one clean column */
+  align-items: center;
   justify-content: center;
-  gap: 2rem;
-}
-
-/* Vertical stacking for the two columns of buttons */
-.social__section > div {
-  display: flex;
-  flex-direction: column;
   gap: 1.5rem;
 }
+
+/* Ensure all buttons have the same width for symmetry */
+.social__section a,
+.social__section button {
+  width: 100%;
+  max-width: 240px;
+}
+
+/* =========================
+   Contact Form
+========================= */
 
 .contact__form {
   display: flex;
@@ -59,28 +70,23 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Mobile Responsive Layout */
-@media (max-width: 900px) {
+/* =========================
+   Mobile Layout
+========================= */
+
+@media (max-width: 850px) {
   .contact__grid {
     grid-template-columns: 1fr;
-    padding: 2rem;
-    gap: 3rem;
+    padding: 2.5rem 1.5rem;
+    gap: 3.5rem;
   }
 
   .social__section {
-    flex-direction: row; /* Keep buttons in two columns if possible */
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 480px) {
-  .social__section {
-    flex-direction: column; /* Stack everything on very small screens */
-    align-items: center;
+    order: 2; /* Put social buttons below the form on mobile */
   }
 
-  .social__section > div {
-    width: 100%;
-    align-items: center;
+  .social__section a,
+  .social__section button {
+    max-width: 100%; /* Full width buttons on small screens */
   }
 }

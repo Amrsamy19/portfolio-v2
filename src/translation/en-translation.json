@@ -1,29 +1,29 @@
 {
-	"navbar-links": {
-		"about-link": "About",
-		"projects-link": "Projects",
-		"contact-link": "Contact"
-	},
-	"home": {
-		"home-title": "Hi There! 👋🏻",
-		"home-name-char": "I'm",
-		"home-name": " Amr Samy",
-		"home-front": "Frontend Developer",
-		"home-back": "Backend Developer"
-	},
-	"about": {
-		"title": "About me",
-		"description": "I am a Front-End Web Developer born and raised in Cairo, Egypt. I graduated from Cairo University and have a serious passion for UI interactions, animations and creating intuitive and dynamic user experiences. I am a well-organised person, problem solver and cooperative person with high attention to detail. Fan of English literature and online gaming.",
-		"skills": "Skills"
-	},
-	"projects": {
-		"title": "Projects"
-	},
-	"contact": {
-		"title": "Come and talk with me 👋🏻",
-		"name": "Name",
-		"email": "Email",
-		"message": "Message",
-		"send": "Send Message"
-	}
+  "navbar-links": {
+    "about-link": "About",
+    "projects-link": "Projects",
+    "contact-link": "Contact"
+  },
+  "home": {
+    "home-title": "Hi There! 👋🏻",
+    "home-name-char": "I'm",
+    "home-name": " Marwan Ragab",
+    "home-front": "Frontend Developer",
+    "home-back": "AI Engineer"
+  },
+  "about": {
+    "title": "About me",
+    "description": "I am a dedicated Computer Science student at the Arab Academy for Science and Technology, driven by a passion for building intelligent and efficient digital solutions. My academic journey is highlighted by receiving the award for the Best Project in Introduction to Artificial Intelligence, where I demonstrated my ability to apply complex algorithms to real-world problems. Beyond academia, I am committed to professional growth; in the summer of 2025, I completed a specialized training program under the mentorship of Mr. Ashraf AbdelGahny, focusing on tax and consultancy systems. This experience allowed me to bridge the gap between technical development and professional business logic, sharpening my skills in creating software that serves specific, high-stakes industry needs.",
+    "skills": "Skills"
+  },
+  "projects": {
+    "title": "Projects"
+  },
+  "contact": {
+    "title": "Come and talk with me 👋🏻",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send Message"
+  }
 }

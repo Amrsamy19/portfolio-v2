@@ -123,16 +123,17 @@
   background: rgba(60, 7, 83, 0.1);
 }
 
-.navbar__links a.active,
+.navbar__links button.active,
 .navbar-logo-link.active {
-  color: #db6db8;
-  background: rgba(219, 109, 184, 0.15);
+  color: #db6db8 !important;
+  background: rgba(219, 109, 184, 0.15) !important;
   box-shadow: 0 0 20px rgba(219, 109, 184, 0.2);
 }
 
-.home__light .navbar__links a.active,
+/* Light mode specific active state */
+.home__light .navbar__links button.active,
 .home__light .navbar-logo-link.active {
-  background: rgba(219, 109, 184, 0.2);
+  background: rgba(219, 109, 184, 0.2) !important;
   border: 1px solid rgba(219, 109, 184, 0.3);
 }
 
@@ -202,4 +203,54 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* =========================
+   Mobile Navigation (Bottom)
+========================= */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: row !important;
+    bottom: 20px;
+    top: auto;
+    left: 50% !important;
+    transform: translateX(-50%);
+    width: 92%;
+    max-width: 480px;
+    height: 70px;
+    padding: 0 15px;
+    border-radius: 40px !important;
+    justify-content: space-between; /* Even spacing */
+  }
+
+  /* Reset the Logo button to look like a normal nav icon on mobile */
+  .navbar-logo-link {
+    margin-bottom: 0 !important;
+    width: 50px !important;
+    height: 50px !important;
+    background: transparent !important;
+  }
+
+  .navbar__divider {
+    display: none;
+  }
+
+  .navbar__links {
+    flex-direction: row !important;
+    flex: unset;
+    gap: 10px;
+  }
+
+  .navbar__controls {
+    flex-direction: row !important;
+    padding: 0;
+  }
+
+  /* ACTIVE STATE FIX */
+  .navbar button.active,
+  .navbar-logo-link.active {
+    color: #db6db8 !important;
+    background: rgba(219, 109, 184, 0.15) !important;
+    border-radius: 50%;
+  }
 }

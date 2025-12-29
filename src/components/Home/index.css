@@ -52,6 +52,7 @@
 .home__cta-buttons {
   display: flex;
   gap: 1.5rem;
+  align-items: center;
   justify-content: center;
   margin-bottom: 4rem;
 }

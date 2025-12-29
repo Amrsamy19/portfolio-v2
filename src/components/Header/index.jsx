@@ -9,11 +9,15 @@ import {
   Brightness7,
   Language,
 } from "@mui/icons-material";
-import { Tooltip, Fade, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 
-export const Header = (props) => {
-  const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === "ar";
+export const Header = ({
+  activeSection,
+  setActiveSection,
+  darkMode,
+  toggleDarkMode,
+}) => {
+  const { i18n } = useTranslation();
 
   const handleLanguageChange = () => {
     const newLang = i18n.language === "en" ? "ar" : "en";
@@ -21,125 +25,59 @@ export const Header = (props) => {
     localStorage.setItem("lang", newLang);
   };
 
-  const handleNavClick = (section) => {
-    props.setActiveSection(section);
-  };
-
   return (
     <nav className="navbar">
+      {/* Home Button */}
       <button
-        onClick={() => handleNavClick("home")}
+        onClick={() => setActiveSection("home")}
         className={`navbar-logo-link ${
-          props.activeSection === "home" ? "active" : ""
+          activeSection === "home" ? "active" : ""
         }`}
       >
-        <Tooltip
-          title={t("navbar-links.home-link") || "Home"}
-          placement={isRTL ? "left" : "right"}
-          TransitionComponent={Fade}
-          arrow
-        >
-          <HomeIcon
-            className="navbar-logo-icon"
-            sx={{
-              fontSize: 40,
-              color: props.activeSection === "home" ? "#db6db8" : "inherit",
-            }}
-          />
-        </Tooltip>
+        <HomeIcon sx={{ fontSize: 30 }} />
       </button>
 
+      {/* Main Links */}
       <div className="navbar__links">
         <button
-          onClick={() => handleNavClick("about")}
-          className={props.activeSection === "about" ? "active" : ""}
+          onClick={() => setActiveSection("about")}
+          className={activeSection === "about" ? "active" : ""}
         >
-          <Tooltip
-            title={t("navbar-links.about-link")}
-            placement={isRTL ? "left" : "right"}
-            TransitionComponent={Fade}
-            arrow
-          >
-            <Person
-              sx={{
-                fontSize: 30,
-                color: props.activeSection === "about" ? "#db6db8" : "inherit",
-              }}
-            />
-          </Tooltip>
+          <Person sx={{ fontSize: 28 }} />
         </button>
         <button
-          onClick={() => handleNavClick("projects")}
-          className={props.activeSection === "projects" ? "active" : ""}
+          onClick={() => setActiveSection("projects")}
+          className={activeSection === "projects" ? "active" : ""}
         >
-          <Tooltip
-            title={t("navbar-links.projects-link")}
-            placement={isRTL ? "left" : "right"}
-            TransitionComponent={Fade}
-            arrow
-          >
-            <Terminal
-              sx={{
-                fontSize: 30,
-                color:
-                  props.activeSection === "projects" ? "#db6db8" : "inherit",
-              }}
-            />
-          </Tooltip>
+          <Terminal sx={{ fontSize: 28 }} />
         </button>
         <button
-          onClick={() => handleNavClick("contact")}
-          className={props.activeSection === "contact" ? "active" : ""}
+          onClick={() => setActiveSection("contact")}
+          className={activeSection === "contact" ? "active" : ""}
         >
-          <Tooltip
-            title={t("navbar-links.contact-link")}
-            placement={isRTL ? "left" : "right"}
-            TransitionComponent={Fade}
-            arrow
-          >
-            <Email
-              sx={{
-                fontSize: 30,
-                color:
-                  props.activeSection === "contact" ? "#db6db8" : "inherit",
-              }}
-            />
-          </Tooltip>
+          <Email sx={{ fontSize: 28 }} />
         </button>
       </div>
 
+      {/* Divider - Hidden on Mobile */}
       <div className="navbar__divider"></div>
 
+      {/* Control Buttons */}
       <div className="navbar__controls">
-        <Tooltip
-          title={props.darkMode ? "Light Mode" : "Dark Mode"}
-          placement={isRTL ? "left" : "right"}
-          TransitionComponent={Fade}
-          arrow
+        <IconButton
+          onClick={toggleDarkMode}
+          color="inherit"
+          className="navbar__control-btn"
         >
-          <IconButton
-            onClick={props.toggleDarkMode}
-            className="navbar__control-btn"
-            sx={{ color: "inherit" }}
-          >
-            {props.darkMode ? <Brightness7 /> : <Brightness4 />}
-          </IconButton>
-        </Tooltip>
-
-        <Tooltip
-          title={i18n.language === "en" ? "العربية" : "English"}
-          placement={isRTL ? "left" : "right"}
-          TransitionComponent={Fade}
-          arrow
+          {darkMode ? <Brightness7 /> : <Brightness4 />}
+        </IconButton>
+        <IconButton
+          onClick={handleLanguageChange}
+          color="inherit"
+          className="navbar__control-btn"
         >
-          <IconButton
-            onClick={handleLanguageChange}
-            className="navbar__control-btn"
-            sx={{ color: "inherit" }}
-          >
-            <Language />
-          </IconButton>
-        </Tooltip>
+          <Language />
+        </IconButton>
       </div>
     </nav>
   );

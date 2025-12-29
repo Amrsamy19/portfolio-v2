@@ -2,10 +2,10 @@
 /* eslint-disable react/prop-types */
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
-import { Facebook, GitHub, LinkedIn, Person } from "@mui/icons-material";
+import { GitHub, LinkedIn, Person } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { toast } from "react-toastify";
-import CV from "../../assets/Amr-Samy-Resume.pdf";
+import CV from "../../assets/Marwan cv.pdf";
 import Link from "@mui/material/Link";
 import emailjs from "@emailjs/browser";
 import "react-toastify/dist/ReactToastify.css";
@@ -80,42 +80,31 @@ export const Contact = ({ darkMode }) => {
       <h2>{t("contact.title")}</h2>
       <div className="contact__grid">
         <div className="social__section">
-          <div>
-            <Link
-              href="https://github.com/Amrsamy19"
-              target="_blank"
-              rel="noopener"
-            >
-              <ColorButton variant="outlined" startIcon={<GitHub />}>
-                Github
-              </ColorButton>
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/amrsamyramadan/"
-              target="_blank"
-              rel="noopener"
-            >
-              <ColorButton variant="outlined" startIcon={<LinkedIn />}>
-                Linkedin
-              </ColorButton>
-            </Link>
-          </div>
-          <div>
-            <Link
-              href="https://web.facebook.com/iambigbanana69"
-              target="_blank"
-              rel="noopener"
-            >
-              <ColorButton variant="outlined" startIcon={<Facebook />}>
-                Facebook
-              </ColorButton>
-            </Link>
-            <Link href={CV} target="_blank" rel="noopener">
-              <ColorButton variant="outlined" startIcon={<Person />}>
-                Download CV
-              </ColorButton>
-            </Link>
-          </div>
+          <Link
+            href="https://github.com/marwanragab866-arch"
+            target="_blank"
+            rel="noopener"
+          >
+            <ColorButton variant="outlined" startIcon={<GitHub />} fullWidth>
+              Github
+            </ColorButton>
+          </Link>
+
+          <Link
+            href="https://www.linkedin.com/in/marwan-ragab-689242368/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+            target="_blank"
+            rel="noopener"
+          >
+            <ColorButton variant="outlined" startIcon={<LinkedIn />} fullWidth>
+              Linkedin
+            </ColorButton>
+          </Link>
+
+          <Link href={CV} target="_blank" rel="noopener">
+            <ColorButton startIcon={<Person />} fullWidth>
+              Download CV
+            </ColorButton>
+          </Link>
         </div>
         <form
           className="contact__form"

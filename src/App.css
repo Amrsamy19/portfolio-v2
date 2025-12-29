@@ -163,3 +163,37 @@ a:active {
 .home__light .navbar__links > a {
   color: #3c0753;
 }
+
+/* =========================
+   Mobile Centering Fix
+========================= */
+
+@media (max-width: 768px) {
+  /* Reset the margins created for the sidebar */
+  .english__font main,
+  .arabic__font main {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem; /* Give some breathing room on the edges */
+  }
+
+  /* Ensure the sections inside main also center their content */
+  main > section {
+    width: 100%;
+    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* Centers text content */
+  }
+
+  /* Adjust App container for mobile */
+  .App {
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+  }
+}
