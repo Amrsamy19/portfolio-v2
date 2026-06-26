@@ -4,9 +4,15 @@ import { createContext, useState } from "react";
 const ThemeContext = createContext();
 
 function ThemeProvider(props) {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("portfolio_theme");
+    return savedTheme ? savedTheme === "dark" : false;
+  });
+
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    const newTheme = !darkMode;
+    setDarkMode(newTheme);
+    localStorage.setItem("portfolio_theme", newTheme ? "dark" : "light");
   };
   return (
     <>
