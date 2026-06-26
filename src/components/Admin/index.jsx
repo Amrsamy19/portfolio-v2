@@ -121,23 +121,22 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
   const saveData = async () => {
     setMessage("Saving...");
     try {
-      await Promise.all([
-        fetch("/api/data", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ type: "projects", content: projectsData }),
-        }),
-        fetch("/api/data", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ type: "en-translation", content: enData }),
-        }),
-        fetch("/api/data", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ type: "ar-translation", content: arData }),
-        }),
-      ]);
+      // Run sequentially to prevent GitHub API branch conflicts (409 errors)
+      await fetch("/api/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "projects", content: projectsData }),
+      });
+      await fetch("/api/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "en-translation", content: enData }),
+      });
+      await fetch("/api/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "ar-translation", content: arData }),
+      });
       setMessage("Saved successfully!");
       setTimeout(() => setMessage(""), 3000);
     } catch (err) {
