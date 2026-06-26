@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   const token = process.env.GITHUB_TOKEN;
   const owner = process.env.GITHUB_OWNER || 'Amrsamy19';
   const repo = process.env.GITHUB_REPO || 'portfolio-v2';
-  const branch = process.env.GITHUB_BRANCH || 'main'; // default to main
+  const branch = process.env.GITHUB_BRANCH || 'master'; // default to master
 
   if (method === 'GET') {
     try {
