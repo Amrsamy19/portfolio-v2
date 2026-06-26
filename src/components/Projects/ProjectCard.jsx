@@ -35,8 +35,6 @@ export const ProjectCard = ({ project, onOpen }) => {
       layoutId={`card-${project.title}`}
       className="project__content"
       onClick={onOpen}
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 300, damping: 22 }}
     >
       {/* Image preview */}
       <div className="project__carousel">

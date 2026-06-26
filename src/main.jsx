@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import i18n from "../i18next.js";
 import { App } from "./App.jsx";
 import { ThemeProvider } from "../Theme.jsx";
@@ -12,7 +13,9 @@ root.render(
 	<React.StrictMode>
 		<I18nextProvider i18n={i18n}>
 			<ThemeProvider>
-				<App />
+				<BrowserRouter>
+					<App />
+				</BrowserRouter>
 				<ToastContainer />
 			</ThemeProvider>
 		</I18nextProvider>

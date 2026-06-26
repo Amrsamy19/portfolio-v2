@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { LayoutGroup } from "framer-motion";
 import "./index.css";
-import { PROJECTS } from "./data";
+import PROJECTS from "../../data/projects.json";
 import { ProjectCard } from "./ProjectCard";
 import { ProjectModal } from "./ProjectModal";
 import { useTranslation } from "react-i18next";

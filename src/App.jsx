@@ -6,6 +6,8 @@ import { Header } from "./components/Header";
 import { Projects } from "./components/Projects";
 import { Contact } from "./components/Contact";
 import { useTranslation } from "react-i18next";
+import { Routes, Route } from "react-router-dom";
+import { AdminDashboard } from "./components/Admin";
 import "./App.css";
 
 export const App = () => {
@@ -40,13 +42,20 @@ export const App = () => {
         i18n.language === "ar" ? "arabic__font" : "english__font"
       }`}
     >
-      <Header
-        darkMode={darkMode}
-        toggleDarkMode={toggleDarkMode}
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
-      />
-      <main>{renderActiveComponent()}</main>
+      <Routes>
+        <Route path="/admin/*" element={<AdminDashboard />} />
+        <Route path="/*" element={
+          <>
+            <Header
+              darkMode={darkMode}
+              toggleDarkMode={toggleDarkMode}
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
+            <main>{renderActiveComponent()}</main>
+          </>
+        } />
+      </Routes>
     </div>
   );
 };
