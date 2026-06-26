@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { Buffer } from "buffer";
 
 export default function localCmsPlugin() {
   return {
@@ -10,11 +11,11 @@ export default function localCmsPlugin() {
           const type = req.headers["x-data-type"];
           let filePath = "";
           if (type === "projects") {
-            filePath = path.resolve(__dirname, "src/data/projects.json");
+            filePath = path.resolve(process.cwd(), "src/data/projects.json");
           } else if (type === "en-translation") {
-            filePath = path.resolve(__dirname, "src/translation/en-translation.json");
+            filePath = path.resolve(process.cwd(), "src/translation/en-translation.json");
           } else if (type === "ar-translation") {
-            filePath = path.resolve(__dirname, "src/translation/ar-translation.json");
+            filePath = path.resolve(process.cwd(), "src/translation/ar-translation.json");
           }
 
           if (filePath && fs.existsSync(filePath)) {
@@ -38,11 +39,11 @@ export default function localCmsPlugin() {
               const { type, content } = JSON.parse(body);
               let filePath = "";
               if (type === "projects") {
-                filePath = path.resolve(__dirname, "src/data/projects.json");
+                filePath = path.resolve(process.cwd(), "src/data/projects.json");
               } else if (type === "en-translation") {
-                filePath = path.resolve(__dirname, "src/translation/en-translation.json");
+                filePath = path.resolve(process.cwd(), "src/translation/en-translation.json");
               } else if (type === "ar-translation") {
-                filePath = path.resolve(__dirname, "src/translation/ar-translation.json");
+                filePath = path.resolve(process.cwd(), "src/translation/ar-translation.json");
               }
 
               if (filePath) {
@@ -76,7 +77,7 @@ export default function localCmsPlugin() {
             try {
               const { filename, base64 } = JSON.parse(body);
               const buffer = Buffer.from(base64.split(",")[1] || base64, "base64");
-              const filePath = path.resolve(__dirname, "public/projects", filename);
+              const filePath = path.resolve(process.cwd(), "public/projects", filename);
               
               fs.writeFileSync(filePath, buffer);
               res.setHeader("Content-Type", "application/json");

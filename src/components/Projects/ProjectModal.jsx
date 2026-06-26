@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-/* Added GitHub to the imports below */
 import { ChevronLeft, ChevronRight, Close, GitHub } from "@mui/icons-material";
 
 export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
   const [[imageIndex, direction], setImageIndex] = useState([0, 0]);
   const images = project.images;
 
-  const paginate = (newDirection) => {
+  const paginate = useCallback((newDirection) => {
     setImageIndex(([prev]) => [
       (prev + newDirection + images.length) % images.length,
       newDirection,
     ]);
-  };
+  }, [images.length]);
 
-  const nextImage = () => paginate(1);
-  const prevImage = () => paginate(-1);
+  const nextImage = useCallback(() => paginate(1), [paginate]);
+  const prevImage = useCallback(() => paginate(-1), [paginate]);
 
   // Keyboard controls
   useEffect(() => {
@@ -26,7 +26,7 @@ export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [imageIndex, onClose]);
+  }, [onClose, nextImage, prevImage]);
 
   // Prevent body scroll
   useEffect(() => {

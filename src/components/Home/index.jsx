@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
 import "./index.css";
-import { TypeAnimation } from "react-type-animation";
 import { useTranslation } from "react-i18next";
 
 export const Home = ({ setActiveSection }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <section id="home" className="home__section">
@@ -15,14 +14,9 @@ export const Home = ({ setActiveSection }) => {
         </h1>
 
         <div className="home__type-wrap">
-          <TypeAnimation
-            key={i18n.language}
-            sequence={[t("home.home-front"), 1000, t("home.home-back"), 1000]}
-            wrapper="span"
-            speed={50}
-            className="type-animation"
-            repeat={Infinity}
-          />
+          <span className="type-animation">
+            {t("home.home-back")}
+          </span>
         </div>
 
         <div className="home__cta-buttons">
@@ -30,7 +24,7 @@ export const Home = ({ setActiveSection }) => {
             onClick={() => setActiveSection("projects")}
             className="cta-btn primary-btn"
           >
-            {t("projects.title")} &rarr;
+            {t("projects.title")}
           </button>
 
           <button

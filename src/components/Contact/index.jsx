@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react/prop-types */
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";

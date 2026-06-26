@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import "./index.css";
 import { useTranslation } from "react-i18next";
 import {
