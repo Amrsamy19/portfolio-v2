@@ -43,7 +43,7 @@ export const App = () => {
       }`}
     >
       <Routes>
-        <Route path="/admin/*" element={<AdminDashboard />} />
+        <Route path="/admin/*" element={<AdminDashboard darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
         <Route path="/*" element={
           <>
             <Header

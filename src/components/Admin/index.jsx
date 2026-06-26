@@ -1,25 +1,32 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { LightMode, DarkMode } from "@mui/icons-material";
 import "./index.css";
 
-export const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState("projects");
-  const [data, setData] = useState(null);
+export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
+  const [activeTab, setActiveTab] = useState("home");
+  const [projectsData, setProjectsData] = useState([]);
+  const [enData, setEnData] = useState(null);
+  const [arData, setArData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetchData(activeTab);
-  }, [activeTab]);
+    fetchAllData();
+  }, []);
 
-  const fetchData = async (type) => {
+  const fetchAllData = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/data", {
-        headers: { "x-data-type": type },
-      });
-      const json = await res.json();
-      setData(json);
+      const [projRes, enRes, arRes] = await Promise.all([
+        fetch("/api/data", { headers: { "x-data-type": "projects" } }),
+        fetch("/api/data", { headers: { "x-data-type": "en-translation" } }),
+        fetch("/api/data", { headers: { "x-data-type": "ar-translation" } })
+      ]);
+      setProjectsData(await projRes.json());
+      setEnData(await enRes.json());
+      setArData(await arRes.json());
     } catch (err) {
       console.error(err);
     }
@@ -29,15 +36,25 @@ export const AdminDashboard = () => {
   const saveData = async () => {
     setMessage("Saving...");
     try {
-      const res = await fetch("/api/data", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: activeTab, content: data }),
-      });
-      if (res.ok) {
-        setMessage("Saved successfully!");
-        setTimeout(() => setMessage(""), 3000);
-      }
+      await Promise.all([
+        fetch("/api/data", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "projects", content: projectsData }),
+        }),
+        fetch("/api/data", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "en-translation", content: enData }),
+        }),
+        fetch("/api/data", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "ar-translation", content: arData }),
+        }),
+      ]);
+      setMessage("Saved successfully!");
+      setTimeout(() => setMessage(""), 3000);
     } catch (err) {
       setMessage("Error saving");
       console.error(err);
@@ -64,76 +81,147 @@ export const AdminDashboard = () => {
     };
   };
 
-  // Render projects editor
-  const renderProjects = () => {
-    if (!data || !Array.isArray(data)) return null;
+  const updateTranslation = (lang, section, key, value) => {
+    if (lang === "en") {
+      setEnData(prev => ({ ...prev, [section]: { ...prev[section], [key]: value } }));
+    } else {
+      setArData(prev => ({ ...prev, [section]: { ...prev[section], [key]: value } }));
+    }
+  };
+
+  const renderDualInput = (label, section, key, isTextArea = false) => {
     return (
-      <div className="admin__projects">
-        {data.map((project, index) => (
-          <div key={index} className="admin__project-card">
-            <input
-              type="text"
-              value={project.title}
-              onChange={(e) => {
-                const newData = [...data];
-                newData[index].title = e.target.value;
-                setData(newData);
-              }}
-              placeholder="Title"
-            />
-            <textarea
-              value={project.description}
-              onChange={(e) => {
-                const newData = [...data];
-                newData[index].description = e.target.value;
-                setData(newData);
-              }}
-              placeholder="Description"
-            />
-            <input
-              type="text"
-              value={project.technologies.join(", ")}
-              onChange={(e) => {
-                const newData = [...data];
-                newData[index].technologies = e.target.value.split(",").map(t => t.trim());
-                setData(newData);
-              }}
-              placeholder="Tech (comma separated)"
-            />
-            <input
-              type="text"
-              value={project.repo}
-              onChange={(e) => {
-                const newData = [...data];
-                newData[index].repo = e.target.value;
-                setData(newData);
-              }}
-              placeholder="Repo Link"
-            />
-            <div>
-              <p>Image: {project.images[0]}</p>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files[0]) {
-                    handleUploadImage(e.target.files[0], (path) => {
-                      const newData = [...data];
-                      newData[index].images = [path];
-                      setData(newData);
-                    });
-                  }
-                }}
+      <div className="admin__dual-input">
+        <label className="admin__dual-label">{label}</label>
+        <div className="admin__dual-fields">
+          <div className="admin__field-wrapper">
+            <span className="admin__lang-badge">EN</span>
+            {isTextArea ? (
+              <textarea 
+                value={enData[section][key] || ""} 
+                onChange={(e) => updateTranslation("en", section, key, e.target.value)}
               />
-            </div>
-            <button onClick={() => {
-              const newData = data.filter((_, i) => i !== index);
-              setData(newData);
-            }}>Delete Project</button>
+            ) : (
+              <input 
+                type="text" 
+                value={enData[section][key] || ""} 
+                onChange={(e) => updateTranslation("en", section, key, e.target.value)}
+              />
+            )}
           </div>
-        ))}
+          <div className="admin__field-wrapper arabic__font">
+            <span className="admin__lang-badge ar">AR</span>
+            {isTextArea ? (
+              <textarea 
+                dir="rtl"
+                value={arData[section][key] || ""} 
+                onChange={(e) => updateTranslation("ar", section, key, e.target.value)}
+              />
+            ) : (
+              <input 
+                type="text" 
+                dir="rtl"
+                value={arData[section][key] || ""} 
+                onChange={(e) => updateTranslation("ar", section, key, e.target.value)}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderHomeContent = () => (
+    <div className="admin__tab-content">
+      <h3>Hero Section</h3>
+      {renderDualInput("Title / Greeting", "home", "home-title")}
+      {renderDualInput("Intro (I'm)", "home", "home-name-char")}
+      {renderDualInput("Name", "home", "home-name")}
+      {renderDualInput("Role / Tagline", "home", "home-back")}
+    </div>
+  );
+
+  const renderAboutContent = () => (
+    <div className="admin__tab-content">
+      <h3>About Me Section</h3>
+      {renderDualInput("Section Title", "about", "title")}
+      {renderDualInput("Bio Description", "about", "description", true)}
+      {renderDualInput("Skills Title", "about", "skills")}
+    </div>
+  );
+
+  const renderProjectsContent = () => (
+    <div className="admin__projects-grid">
+      {projectsData.map((project, index) => (
+        <div key={index} className="admin__project-card glass-card">
+          <input
+            type="text"
+            value={project.title}
+            onChange={(e) => {
+              const newData = [...projectsData];
+              newData[index].title = e.target.value;
+              setProjectsData(newData);
+            }}
+            placeholder="Title"
+            className="admin__input"
+          />
+          <textarea
+            value={project.description}
+            onChange={(e) => {
+              const newData = [...projectsData];
+              newData[index].description = e.target.value;
+              setProjectsData(newData);
+            }}
+            placeholder="Description"
+            className="admin__input"
+          />
+          <input
+            type="text"
+            value={project.technologies.join(", ")}
+            onChange={(e) => {
+              const newData = [...projectsData];
+              newData[index].technologies = e.target.value.split(",").map(t => t.trim());
+              setProjectsData(newData);
+            }}
+            placeholder="Tech (comma separated)"
+            className="admin__input"
+          />
+          <input
+            type="text"
+            value={project.repo}
+            onChange={(e) => {
+              const newData = [...projectsData];
+              newData[index].repo = e.target.value;
+              setProjectsData(newData);
+            }}
+            placeholder="Repo Link"
+            className="admin__input"
+          />
+          <div className="admin__image-upload">
+            <p>Image: {project.images[0]}</p>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                if (e.target.files[0]) {
+                  handleUploadImage(e.target.files[0], (path) => {
+                    const newData = [...projectsData];
+                    newData[index].images = [path];
+                    setProjectsData(newData);
+                  });
+                }
+              }}
+            />
+          </div>
+          <button className="admin__btn danger" onClick={() => {
+            const newData = projectsData.filter((_, i) => i !== index);
+            setProjectsData(newData);
+          }}>Delete Project</button>
+        </div>
+      ))}
+      <div className="admin__project-card glass-card admin__add-project">
         <button className="admin__btn primary" onClick={() => {
-          setData([...data, {
+          setProjectsData([...projectsData, {
             id: Date.now().toString(),
             title: "New Project",
             description: "",
@@ -142,89 +230,62 @@ export const AdminDashboard = () => {
             link: "",
             images: []
           }]);
-        }}>+ Add Project</button>
+        }}>+ Add New Project</button>
       </div>
-    );
-  };
+    </div>
+  );
 
-  // Render translations editor
-  const renderTranslations = () => {
-    if (!data) return null;
-    
-    // Simple recursive editor for JSON
-    const renderObject = (obj, path = []) => {
-      return Object.entries(obj).map(([key, value]) => {
-        const currentPath = [...path, key];
-        if (typeof value === 'object' && value !== null) {
-          return (
-            <div key={key} className="admin__json-group">
-              <h4>{key}</h4>
-              <div style={{ marginLeft: 20 }}>
-                {renderObject(value, currentPath)}
-              </div>
-            </div>
-          );
-        }
-        return (
-          <div key={key} className="admin__json-field">
-            <label>{key}</label>
-            <textarea
-              value={value}
-              onChange={(e) => {
-                const newData = JSON.parse(JSON.stringify(data));
-                let target = newData;
-                for (let i = 0; i < currentPath.length - 1; i++) {
-                  target = target[currentPath[i]];
-                }
-                target[currentPath[currentPath.length - 1]] = e.target.value;
-                setData(newData);
-              }}
-            />
-          </div>
-        );
-      });
-    };
-
-    return <div className="admin__translations">{renderObject(data)}</div>;
-  };
+  if (loading || !enData || !arData) {
+    return <div className="admin__container">Loading...</div>;
+  }
 
   return (
     <div className="admin__container english__font">
-      <div className="admin__header">
-        <h1>Local Admin Dashboard</h1>
-        <Link to="/" className="admin__btn">Back to Portfolio</Link>
-      </div>
-      
-      <div className="admin__tabs">
-        <button 
-          className={activeTab === "projects" ? "active" : ""} 
-          onClick={() => setActiveTab("projects")}
-        >
-          Projects
-        </button>
-        <button 
-          className={activeTab === "en-translation" ? "active" : ""} 
-          onClick={() => setActiveTab("en-translation")}
-        >
-          English Bio/Text
-        </button>
-        <button 
-          className={activeTab === "ar-translation" ? "active" : ""} 
-          onClick={() => setActiveTab("ar-translation")}
-        >
-          Arabic Bio/Text
-        </button>
-      </div>
+      <div className="glass-card admin__main-card">
+        <div className="admin__header">
+          <h1>Admin Dashboard</h1>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <span 
+              onClick={toggleDarkMode} 
+              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+            >
+              {darkMode ? <LightMode /> : <DarkMode />}
+            </span>
+            <Link to="/" className="admin__btn">Back to Portfolio</Link>
+          </div>
+        </div>
+        
+        <div className="admin__tabs">
+          <button 
+            className={activeTab === "home" ? "active" : ""} 
+            onClick={() => setActiveTab("home")}
+          >
+            Home Content
+          </button>
+          <button 
+            className={activeTab === "about" ? "active" : ""} 
+            onClick={() => setActiveTab("about")}
+          >
+            About Content
+          </button>
+          <button 
+            className={activeTab === "projects" ? "active" : ""} 
+            onClick={() => setActiveTab("projects")}
+          >
+            Projects Grid
+          </button>
+        </div>
 
-      <div className="admin__content">
-        {loading ? <p>Loading...</p> : (
-          activeTab === "projects" ? renderProjects() : renderTranslations()
-        )}
-      </div>
+        <div className="admin__content">
+          {activeTab === "home" && renderHomeContent()}
+          {activeTab === "about" && renderAboutContent()}
+          {activeTab === "projects" && renderProjectsContent()}
+        </div>
 
-      <div className="admin__footer">
-        {message && <span className="admin__message">{message}</span>}
-        <button className="admin__btn primary" onClick={saveData}>Save Changes</button>
+        <div className="admin__footer">
+          {message && <span className="admin__message">{message}</span>}
+          <button className="admin__btn primary large" onClick={saveData}>Save All Changes</button>
+        </div>
       </div>
     </div>
   );
