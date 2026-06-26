@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { LightMode, DarkMode } from "@mui/icons-material";
+import ProfilePic from "../../assets/me-about.jpeg";
 import "./index.css";
 
 const TECH_OPTIONS = [
@@ -10,11 +11,17 @@ const TECH_OPTIONS = [
   "PyTorch", "TensorFlow", "Machine Learning", "AI", "Preact"
 ];
 
-const TechInput = ({ technologies, onChange }) => {
+const AI_SKILLS_OPTIONS = [
+  "Python", "PyTorch", "TensorFlow", "Scikit-learn", "Keras",
+  "Pandas", "NumPy", "OpenCV", "Jupyter", "Kaggle",
+  "Machine Learning", "Deep Learning", "NLP", "Computer Vision"
+];
+
+const TechInput = ({ technologies, onChange, options = TECH_OPTIONS }) => {
   const [inputValue, setInputValue] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const filteredOptions = TECH_OPTIONS.filter(tech => 
+  const filteredOptions = options.filter(tech => 
     tech.toLowerCase().includes(inputValue.toLowerCase()) && 
     !technologies.includes(tech)
   );
@@ -79,12 +86,16 @@ const TechInput = ({ technologies, onChange }) => {
 };
 
 export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
-  const [activeTab, setActiveTab] = useState("home");
+  const [activeTab, setActiveTab] = useState(() => sessionStorage.getItem("adminActiveTab") || "home");
   const [projectsData, setProjectsData] = useState([]);
   const [enData, setEnData] = useState(null);
   const [arData, setArData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    sessionStorage.setItem("adminActiveTab", activeTab);
+  }, [activeTab]);
 
   useEffect(() => {
     fetchAllData();
@@ -220,13 +231,11 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
       <h3>About Me Section</h3>
       <div className="admin__image-upload" style={{ marginBottom: "2rem" }}>
         <p>Profile Image: {enData?.about?.image || "Default"}</p>
-        {enData?.about?.image && (
-          <img
-            src={enData.about.image}
-            alt="Profile Preview"
-            style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "50%", marginBottom: "1rem", border: "2px solid #db6db8" }}
-          />
-        )}
+        <img
+          src={enData?.about?.image && enData.about.image !== "about.image" ? enData.about.image : ProfilePic}
+          alt="Profile Preview"
+          style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "50%", marginBottom: "1rem", border: "2px solid #db6db8" }}
+        />
         <input
           type="file"
           accept="image/*"
@@ -244,6 +253,18 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
       {renderDualInput("Section Title", "about", "title")}
       {renderDualInput("Bio Description", "about", "description", true)}
       {renderDualInput("Skills Title", "about", "skills")}
+      
+      <div style={{ marginTop: "2rem" }}>
+        <label className="admin__dual-label">AI & Technical Skills (Select for About Page)</label>
+        <TechInput 
+          technologies={enData?.about?.aiSkills || []} 
+          options={AI_SKILLS_OPTIONS}
+          onChange={(newTech) => {
+            updateTranslation("en", "about", "aiSkills", newTech);
+            updateTranslation("ar", "about", "aiSkills", newTech);
+          }} 
+        />
+      </div>
     </div>
   );
 
@@ -292,13 +313,17 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             className="admin__input"
           />
           <div className="admin__image-upload">
-            <p>Image: {project.images[0]}</p>
-            {project.images[0] && (
+            <p>Image: {project.images && project.images[0] ? project.images[0] : "None"}</p>
+            {project.images && project.images[0] ? (
               <img
                 src={project.images[0]}
                 alt="Project Preview"
                 style={{ width: "100%", maxHeight: "150px", objectFit: "cover", borderRadius: "8px", marginBottom: "1rem" }}
               />
+            ) : (
+              <div style={{ width: "100%", height: "150px", background: "rgba(255,255,255,0.05)", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem", border: "1px dashed rgba(255,255,255,0.2)" }}>
+                <span style={{ opacity: 0.5 }}>No Image Available</span>
+              </div>
             )}
             <input
               type="file"

@@ -1,15 +1,13 @@
 [
   {
-    "id": "1782515260569",
+    "id": "1782515945987",
     "title": "New Project",
     "description": "New Project",
     "technologies": [
-      "New Project"
+      "React"
     ],
     "repo": "https://github.com/marwanragab866-arch/color-palette-generator",
     "link": "",
-    "images": [
-      "/projects/ecabad72ac84a96e414c282025bc9604.jpg"
-    ]
+    "images": []
   }
 ]

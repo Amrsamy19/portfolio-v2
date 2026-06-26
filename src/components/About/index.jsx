@@ -2,13 +2,22 @@
 //TODO: Fix dark mode on this part
 
 import {
+  PythonOriginal,
+  PytorchOriginal,
+  TensorflowOriginal,
+  ScikitlearnOriginal,
+  KerasOriginal,
+  PandasOriginal,
+  NumpyOriginal,
+  OpencvOriginal,
+  JupyterOriginal,
+  KaggleOriginal,
   Css3Original,
   JavascriptOriginal,
   ReactOriginal,
   Html5Original,
   JavaOriginal,
   CplusplusOriginal,
-  PythonOriginal,
   COriginal,
   KotlinOriginal,
 } from "devicons-react";
@@ -16,47 +25,49 @@ import ProfilePic from "../../assets/me-about.jpeg";
 import "./index.css";
 import { useTranslation } from "react-i18next";
 
+const ICON_MAP = {
+  "Python": PythonOriginal,
+  "PyTorch": PytorchOriginal,
+  "TensorFlow": TensorflowOriginal,
+  "Scikit-learn": ScikitlearnOriginal,
+  "Keras": KerasOriginal,
+  "Pandas": PandasOriginal,
+  "NumPy": NumpyOriginal,
+  "OpenCV": OpencvOriginal,
+  "Jupyter": JupyterOriginal,
+  "Kaggle": KaggleOriginal,
+  "React": ReactOriginal,
+  "Javascript": JavascriptOriginal,
+  "Html": Html5Original,
+  "Css": Css3Original,
+  "Java": JavaOriginal,
+  "C": COriginal,
+  "C++": CplusplusOriginal,
+  "Kotlin": KotlinOriginal,
+};
+
 const Technologies = (props) => {
+  const { t } = useTranslation();
+  let aiSkills = t("about.aiSkills", { returnObjects: true });
+  
+  // Fallback to defaults if not set or empty
+  if (!Array.isArray(aiSkills) || aiSkills.length === 0) {
+    aiSkills = ["React", "Javascript", "Html", "Css", "Java", "C", "C++", "Python", "Kotlin"];
+  }
+
   return (
     <div>
       <h2 className="skills__title">{props.title}</h2>
       <div className="skills__grid">
-        <div className="skill__box">
-          <ReactOriginal size={60} aria-label="React" />
-          <label className="english__font">React</label>
-        </div>
-        <div className="skill__box">
-          <JavascriptOriginal size={60} aria-label="Javascript" />
-          <label className="english__font">Javascript</label>
-        </div>
-        <div className="skill__box">
-          <Html5Original size={60} aria-label="Html" />
-          <label className="english__font">Html</label>
-        </div>
-        <div className="skill__box">
-          <Css3Original size={60} aria-label="Css" />
-          <label className="english__font">Css</label>
-        </div>
-        <div className="skill__box">
-          <JavaOriginal size={60} aria-label="Java" />
-          <label className="english__font">Java</label>
-        </div>
-        <div className="skill__box">
-          <COriginal size={60} aria-label="C" />
-          <label className="english__font">C</label>
-        </div>
-        <div className="skill__box">
-          <CplusplusOriginal size={60} aria-label="C++" />
-          <label className="english__font">C++</label>
-        </div>
-        <div className="skill__box">
-          <PythonOriginal size={60} aria-label="Python" />
-          <label className="english__font">Python</label>
-        </div>
-        <div className="skill__box">
-          <KotlinOriginal size={60} aria-label="Kotlin" />
-          <label className="english__font">Kotlin</label>
-        </div>
+        {aiSkills.map((skill, index) => {
+          const Icon = ICON_MAP[skill];
+          return (
+            <div className="skill__box" key={index}>
+              {Icon ? <Icon size={60} aria-label={skill} /> : <div style={{height: 60, width: 60, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.1)", borderRadius: "50%"}}><span>{skill[0]}</span></div>}
+              <label className="english__font">{skill}</label>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
