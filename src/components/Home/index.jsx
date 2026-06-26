@@ -4,7 +4,7 @@ import { TypeAnimation } from "react-type-animation";
 import { useTranslation } from "react-i18next";
 
 export const Home = ({ setActiveSection }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <section id="home" className="home__section">
@@ -16,6 +16,7 @@ export const Home = ({ setActiveSection }) => {
 
         <div className="home__type-wrap">
           <TypeAnimation
+            key={i18n.language}
             sequence={[t("home.home-front"), 1000, t("home.home-back"), 1000]}
             wrapper="span"
             speed={50}
