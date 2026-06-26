@@ -69,7 +69,7 @@ export const About = () => {
       <h2 className="about__title">{t("about.title")}</h2>
       <div className="about__grid">
         <div className="about__img">
-          <img src={ProfilePic} alt="profile" />
+          <img src={t("about.image") && t("about.image") !== "about.image" ? t("about.image") : ProfilePic} alt="profile" />
         </div>
         <div className="about__content">
           <p className="about__body-text">{t("about.description")}</p>

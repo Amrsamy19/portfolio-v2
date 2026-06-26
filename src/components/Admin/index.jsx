@@ -4,6 +4,80 @@ import { Link } from "react-router-dom";
 import { LightMode, DarkMode } from "@mui/icons-material";
 import "./index.css";
 
+const TECH_OPTIONS = [
+  "React", "Javascript", "TypeScript", "HTML5", "CSS3", "Java", 
+  "C", "C++", "Python", "Kotlin", "Node.js", "Express", "MongoDB", 
+  "PyTorch", "TensorFlow", "Machine Learning", "AI", "Preact"
+];
+
+const TechInput = ({ technologies, onChange }) => {
+  const [inputValue, setInputValue] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const filteredOptions = TECH_OPTIONS.filter(tech => 
+    tech.toLowerCase().includes(inputValue.toLowerCase()) && 
+    !technologies.includes(tech)
+  );
+
+  const handleAdd = (tech) => {
+    if (!technologies.includes(tech)) {
+      onChange([...technologies, tech]);
+    }
+    setInputValue("");
+    setShowDropdown(false);
+  };
+
+  const handleRemove = (techToRemove) => {
+    onChange(technologies.filter(tech => tech !== techToRemove));
+  };
+
+  return (
+    <div>
+      <div className="admin__tech-pills">
+        {technologies.map((tech, i) => (
+          <span key={i} className="admin__tech-pill">
+            {tech}
+            <button onClick={() => handleRemove(tech)}>×</button>
+          </span>
+        ))}
+      </div>
+      <div className="admin__tech-input-wrapper">
+        <input
+          type="text"
+          placeholder="Add Tech Skill and press Enter..."
+          className="admin__input"
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+            setShowDropdown(true);
+          }}
+          onFocus={() => setShowDropdown(true)}
+          onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && inputValue.trim() !== "") {
+              e.preventDefault();
+              handleAdd(inputValue.trim());
+            }
+          }}
+        />
+        {showDropdown && filteredOptions.length > 0 && (
+          <div className="admin__custom-dropdown">
+            {filteredOptions.map((option, i) => (
+              <div 
+                key={i} 
+                className="admin__dropdown-item"
+                onMouseDown={() => handleAdd(option)}
+              >
+                {option}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
   const [activeTab, setActiveTab] = useState("home");
   const [projectsData, setProjectsData] = useState([]);
@@ -97,14 +171,14 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           <div className="admin__field-wrapper">
             <span className="admin__lang-badge">EN</span>
             {isTextArea ? (
-              <textarea 
-                value={enData[section][key] || ""} 
+              <textarea
+                value={enData[section][key] || ""}
                 onChange={(e) => updateTranslation("en", section, key, e.target.value)}
               />
             ) : (
-              <input 
-                type="text" 
-                value={enData[section][key] || ""} 
+              <input
+                type="text"
+                value={enData[section][key] || ""}
                 onChange={(e) => updateTranslation("en", section, key, e.target.value)}
               />
             )}
@@ -112,16 +186,16 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           <div className="admin__field-wrapper arabic__font">
             <span className="admin__lang-badge ar">AR</span>
             {isTextArea ? (
-              <textarea 
+              <textarea
                 dir="rtl"
-                value={arData[section][key] || ""} 
+                value={arData[section][key] || ""}
                 onChange={(e) => updateTranslation("ar", section, key, e.target.value)}
               />
             ) : (
-              <input 
-                type="text" 
+              <input
+                type="text"
                 dir="rtl"
-                value={arData[section][key] || ""} 
+                value={arData[section][key] || ""}
                 onChange={(e) => updateTranslation("ar", section, key, e.target.value)}
               />
             )}
@@ -144,6 +218,29 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
   const renderAboutContent = () => (
     <div className="admin__tab-content">
       <h3>About Me Section</h3>
+      <div className="admin__image-upload" style={{ marginBottom: "2rem" }}>
+        <p>Profile Image: {enData?.about?.image || "Default"}</p>
+        {enData?.about?.image && (
+          <img
+            src={enData.about.image}
+            alt="Profile Preview"
+            style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "50%", marginBottom: "1rem", border: "2px solid #db6db8" }}
+          />
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          style={{ paddingTop: "10px" }}
+          onChange={(e) => {
+            if (e.target.files[0]) {
+              handleUploadImage(e.target.files[0], (path) => {
+                updateTranslation("en", "about", "image", path);
+                updateTranslation("ar", "about", "image", path);
+              });
+            }
+          }}
+        />
+      </div>
       {renderDualInput("Section Title", "about", "title")}
       {renderDualInput("Bio Description", "about", "description", true)}
       {renderDualInput("Skills Title", "about", "skills")}
@@ -175,16 +272,13 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             placeholder="Description"
             className="admin__input"
           />
-          <input
-            type="text"
-            value={project.technologies.join(", ")}
-            onChange={(e) => {
+          <TechInput 
+            technologies={project.technologies} 
+            onChange={(newTech) => {
               const newData = [...projectsData];
-              newData[index].technologies = e.target.value.split(",").map(t => t.trim());
+              newData[index].technologies = newTech;
               setProjectsData(newData);
-            }}
-            placeholder="Tech (comma separated)"
-            className="admin__input"
+            }} 
           />
           <input
             type="text"
@@ -199,6 +293,13 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           />
           <div className="admin__image-upload">
             <p>Image: {project.images[0]}</p>
+            {project.images[0] && (
+              <img
+                src={project.images[0]}
+                alt="Project Preview"
+                style={{ width: "100%", maxHeight: "150px", objectFit: "cover", borderRadius: "8px", marginBottom: "1rem" }}
+              />
+            )}
             <input
               type="file"
               accept="image/*"
@@ -213,10 +314,13 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
               }}
             />
           </div>
-          <button className="admin__btn danger" onClick={() => {
-            const newData = projectsData.filter((_, i) => i !== index);
-            setProjectsData(newData);
-          }}>Delete Project</button>
+          <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+            <button className="admin__btn primary" onClick={saveData}>Save Project</button>
+            <button className="admin__btn danger" onClick={() => {
+              const newData = projectsData.filter((_, i) => i !== index);
+              setProjectsData(newData);
+            }}>Delete Project</button>
+          </div>
         </div>
       ))}
       <div className="admin__project-card glass-card admin__add-project">
@@ -245,8 +349,8 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
         <div className="admin__header">
           <h1>Admin Dashboard</h1>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <span 
-              onClick={toggleDarkMode} 
+            <span
+              onClick={toggleDarkMode}
               style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
             >
               {darkMode ? <LightMode /> : <DarkMode />}
@@ -254,22 +358,22 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             <Link to="/" className="admin__btn">Back to Portfolio</Link>
           </div>
         </div>
-        
+
         <div className="admin__tabs">
-          <button 
-            className={activeTab === "home" ? "active" : ""} 
+          <button
+            className={activeTab === "home" ? "active" : ""}
             onClick={() => setActiveTab("home")}
           >
             Home Content
           </button>
-          <button 
-            className={activeTab === "about" ? "active" : ""} 
+          <button
+            className={activeTab === "about" ? "active" : ""}
             onClick={() => setActiveTab("about")}
           >
             About Content
           </button>
-          <button 
-            className={activeTab === "projects" ? "active" : ""} 
+          <button
+            className={activeTab === "projects" ? "active" : ""}
             onClick={() => setActiveTab("projects")}
           >
             Projects Grid
@@ -284,7 +388,9 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
 
         <div className="admin__footer">
           {message && <span className="admin__message">{message}</span>}
-          <button className="admin__btn primary large" onClick={saveData}>Save All Changes</button>
+          {activeTab !== "projects" && (
+            <button className="admin__btn primary large" onClick={saveData}>Save All Changes</button>
+          )}
         </div>
       </div>
     </div>
