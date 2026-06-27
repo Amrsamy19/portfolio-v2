@@ -14,7 +14,16 @@ export async function POST(request) {
   const filePath = `public/projects/${filename}`;
 
   if (!token) {
-    return NextResponse.json({ error: 'GITHUB_TOKEN is missing. Cannot upload image in production.' }, { status: 500 });
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const localPath = path.resolve(process.cwd(), filePath);
+      const base64Data = base64.includes(',') ? base64.split(',')[1] : base64;
+      fs.writeFileSync(localPath, Buffer.from(base64Data, 'base64'));
+      return NextResponse.json({ success: true, path: `/projects/${filename}` }, { status: 200 });
+    } catch (fsErr) {
+      return NextResponse.json({ error: 'GITHUB_TOKEN is missing and local write failed: ' + fsErr.message }, { status: 500 });
+    }
   }
 
   try {
