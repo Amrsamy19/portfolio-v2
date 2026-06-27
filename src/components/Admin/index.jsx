@@ -380,7 +380,7 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           }]);
         }}
       >
-        <button className="admin__btn primary" style={{ pointerEvents: "none" }}>+ Add New Project</button>
+        <button className="admin__btn primary">+ Add New Project</button>
       </div>
     </div>
   );
