@@ -232,7 +232,7 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
       <div className="admin__image-upload" style={{ marginBottom: "2rem" }}>
         <p>Profile Image: {enData?.about?.image || "Default"}</p>
         <img
-          src={enData?.about?.image && enData.about.image !== "about.image" ? enData.about.image : ProfilePic}
+          src={enData?.about?.image && enData.about.image !== "about.image" ? enData.about.image : ProfilePic.src}
           alt="Profile Preview"
           style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "50%", marginBottom: "1rem", border: "2px solid #db6db8" }}
         />
@@ -369,7 +369,7 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
   }
 
   return (
-    <div className="admin__container english__font">
+    <div className="admin__container">
       <div className="glass-card admin__main-card">
         <div className="admin__header">
           <h1>Admin Dashboard</h1>
@@ -380,7 +380,9 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             >
               {darkMode ? <LightMode /> : <DarkMode />}
             </span>
-            <Link to="/" className="admin__btn">Back to Portfolio</Link>
+            <Link href="/" className="admin__btn">
+              Back To Website
+            </Link>
           </div>
         </div>
 

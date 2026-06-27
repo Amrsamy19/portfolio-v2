@@ -43,11 +43,7 @@ export default function Page() {
   if (!mounted) return null; // Avoid hydration mismatch for local storage
 
   return (
-    <div
-      className={`App ${darkMode ? "home__dark" : "home__light"} ${
-        i18n.language === "ar" ? "arabic__font" : "english__font"
-      }`}
-    >
+    <>
       <Header
         darkMode={darkMode}
         toggleDarkMode={toggleDarkMode}
@@ -55,6 +51,6 @@ export default function Page() {
         setActiveSection={setActiveSection}
       />
       <main>{renderActiveComponent()}</main>
-    </div>
+    </>
   );
 }

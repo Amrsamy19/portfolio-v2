@@ -42,7 +42,7 @@
 }
 
 .arabic__font {
-  font-family: "Cairo", sans-serif;
+  font-family: var(--font-cairo), sans-serif;
   font-weight: 500;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .english__font {
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--font-montserrat), sans-serif;
 }
 
 .home__dark {

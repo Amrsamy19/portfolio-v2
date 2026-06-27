@@ -21,6 +21,9 @@ import {
   CplusplusOriginal,
   COriginal,
   KotlinOriginal,
+  NodejsOriginal,
+  ExpressOriginal,
+  MongodbOriginal,
 } from "devicons-react";
 import ProfilePic from "../../assets/me-about.jpeg";
 import "./index.css";
@@ -45,6 +48,9 @@ const ICON_MAP = {
   "C": COriginal,
   "C++": CplusplusOriginal,
   "Kotlin": KotlinOriginal,
+  "Node.js": NodejsOriginal,
+  "Express": ExpressOriginal,
+  "MongoDB": MongodbOriginal,
 };
 
 const Technologies = (props) => {
@@ -81,7 +87,7 @@ export const About = () => {
       <h2 className="about__title">{t("about.title")}</h2>
       <div className="about__grid">
         <div className="about__img">
-          <img src={t("about.image") && t("about.image") !== "about.image" ? t("about.image") : ProfilePic} alt="profile" />
+          <img src={t("about.image") && t("about.image") !== "about.image" ? t("about.image") : ProfilePic.src} alt="profile" />
         </div>
         <div className="about__content">
           <p className="about__body-text">{t("about.description")}</p>
