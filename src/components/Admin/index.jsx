@@ -275,6 +275,22 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
       {renderDualInput("Bio Description", "about", "description", true)}
       {renderDualInput("Skills Title", "about", "skills")}
       
+      <div className="admin__image-upload" style={{ marginTop: "2rem" }}>
+        <p>CV / Resume Document: {enData?.contact?.cv || "/Marwan_cv.pdf"}</p>
+        <input
+          type="file"
+          accept=".pdf,.doc,.docx"
+          onChange={(e) => {
+            if (e.target.files[0]) {
+              handleUploadImage(e.target.files[0], (path) => {
+                updateTranslation("en", "contact", "cv", path);
+                updateTranslation("ar", "contact", "cv", path);
+              });
+            }
+          }}
+        />
+      </div>
+      
       <div style={{ marginTop: "2rem" }}>
         <label className="admin__dual-label">AI & Technical Skills (Select for About Page)</label>
         <TechInput 
@@ -350,8 +366,10 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           </div>
         </div>
       ))}
-      <div className="admin__project-card glass-card admin__add-project">
-        <button className="admin__btn primary" onClick={() => {
+      <div 
+        className="admin__project-card glass-card admin__add-project"
+        style={{ cursor: "pointer" }}
+        onClick={() => {
           setProjectsData([...projectsData, {
             id: Date.now().toString(),
             title: "New Project",
@@ -360,7 +378,9 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             repo: "",
             link: ""
           }]);
-        }}>+ Add New Project</button>
+        }}
+      >
+        <button className="admin__btn primary" style={{ pointerEvents: "none" }}>+ Add New Project</button>
       </div>
     </div>
   );
