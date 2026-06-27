@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
-const prisma = new PrismaClient({ accelerateUrl: process.env.PRISMA_DATABASE_URL });
+const prisma = new PrismaClient();
 
 export async function GET(request) {
   const type = request.headers.get('x-data-type') || new URL(request.url).searchParams.get('type');

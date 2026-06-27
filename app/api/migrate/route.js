@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
-const prisma = new PrismaClient({ accelerateUrl: process.env.PRISMA_DATABASE_URL });
+const prisma = new PrismaClient();
 
 export async function GET() {
   try {
