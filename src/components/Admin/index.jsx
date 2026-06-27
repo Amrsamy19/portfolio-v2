@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LightMode, DarkMode } from "@mui/icons-material";
+import { LightMode, DarkMode, Language } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import ProfilePic from "../../assets/me-about.jpeg";
 import "./index.css";
@@ -89,6 +89,13 @@ const TechInput = ({ technologies, onChange, options = TECH_OPTIONS, placeholder
 
 export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
   const { t, i18n } = useTranslation();
+  
+  const handleLanguageChange = () => {
+    const newLang = i18n.language === "en" ? "ar" : "en";
+    i18n.changeLanguage(newLang);
+    localStorage.setItem("lang", newLang);
+  };
+
   const [activeTab, setActiveTab] = useState(() => sessionStorage.getItem("adminActiveTab") || "home");
   const [projectsData, setProjectsData] = useState([]);
   const [originalProjectsData, setOriginalProjectsData] = useState([]);
@@ -408,8 +415,16 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             <span
               onClick={toggleDarkMode}
               style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+              title="Toggle Theme"
             >
               {darkMode ? <LightMode /> : <DarkMode />}
+            </span>
+            <span
+              onClick={handleLanguageChange}
+              style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+              title="Change Language"
+            >
+              <Language />
             </span>
             <Link href="/" className="admin__btn">
               {t("admin.back")}
