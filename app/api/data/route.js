@@ -32,7 +32,7 @@ async function handleDataRequest(method, type, contentBody) {
       if (!token) {
         const fs = await import('fs');
         const path = await import('path');
-        const localPath = path.resolve(process.cwd(), filePath);
+        const localPath = path.resolve(/*turbopackIgnore: true*/ process.cwd(), filePath);
         if (fs.existsSync(localPath)) {
           const data = fs.readFileSync(localPath, 'utf-8');
           return new NextResponse(data, {
