@@ -35,7 +35,7 @@ export const Contact = ({ darkMode }) => {
     },
     // Label
     "& .MuiInputLabel-standard": {
-      fontFamily: `${i18n.language === "ar" ? "Amiri" : "Poppins"}`,
+      fontFamily: `${i18n.language === "ar" ? "var(--font-cairo)" : "var(--font-montserrat)"}`,
       fontWeight: "600",
       color: darkMode ? "#fff" : "#3c0753",
       "&.Mui-focused": {
@@ -48,7 +48,7 @@ export const Contact = ({ darkMode }) => {
     color: darkMode ? "#fff" : darkMode ? "#fff" : "#3c0753",
     borderColor: darkMode ? "#fff" : darkMode ? "#fff" : "#3c0753",
     border: "2px solid",
-    fontFamily: "Poppins, sans-serif",
+    fontFamily: "var(--font-montserrat), sans-serif",
     fontWeight: "600",
     fontSize: "1rem",
     transition: "0.2s",

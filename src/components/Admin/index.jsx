@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { LightMode, DarkMode } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 import ProfilePic from "../../assets/me-about.jpeg";
 import "./index.css";
 
@@ -18,7 +19,7 @@ const AI_SKILLS_OPTIONS = [
   "Machine Learning", "Deep Learning", "NLP", "Computer Vision"
 ];
 
-const TechInput = ({ technologies, onChange, options = TECH_OPTIONS }) => {
+const TechInput = ({ technologies, onChange, options = TECH_OPTIONS, placeholder }) => {
   const [inputValue, setInputValue] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -52,7 +53,7 @@ const TechInput = ({ technologies, onChange, options = TECH_OPTIONS }) => {
       <div className="admin__tech-input-wrapper">
         <input
           type="text"
-          placeholder="Add Tech Skill and press Enter..."
+          placeholder={placeholder}
           className="admin__input"
           value={inputValue}
           onChange={(e) => {
@@ -87,6 +88,7 @@ const TechInput = ({ technologies, onChange, options = TECH_OPTIONS }) => {
 };
 
 export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState(() => sessionStorage.getItem("adminActiveTab") || "home");
   const [projectsData, setProjectsData] = useState([]);
   const [originalProjectsData, setOriginalProjectsData] = useState([]);
@@ -123,7 +125,7 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
   };
 
   const saveData = async () => {
-    setMessage("Saving...");
+    setMessage(t("admin.messages.saving"));
     try {
       // Run sequentially to prevent GitHub API branch conflicts (409 errors)
       await fetch("/api/data", {
@@ -141,16 +143,16 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "ar-translation", content: arData }),
       });
-      setMessage("Saved successfully!");
+      setMessage(t("admin.messages.saved"));
       setTimeout(() => setMessage(""), 3000);
     } catch (err) {
-      setMessage("Error saving");
+      setMessage(t("admin.messages.error"));
       console.error(err);
     }
   };
 
   const saveProjectData = async (newProjects = projectsData) => {
-    setMessage("Saving Projects...");
+    setMessage(t("admin.messages.saving_proj"));
     try {
       await fetch("/api/data", {
         method: "POST",
@@ -159,10 +161,10 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
       });
       setProjectsData(newProjects);
       setOriginalProjectsData(JSON.parse(JSON.stringify(newProjects)));
-      setMessage("Projects saved successfully!");
+      setMessage(t("admin.messages.saved_proj"));
       setTimeout(() => setMessage(""), 3000);
     } catch (err) {
-      setMessage("Error saving projects");
+      setMessage(t("admin.messages.error_proj"));
       console.error(err);
     }
   };
@@ -239,19 +241,19 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
 
   const renderHomeContent = () => (
     <div className="admin__tab-content">
-      <h3>Hero Section</h3>
-      {renderDualInput("Title / Greeting", "home", "home-title")}
-      {renderDualInput("Intro (I'm)", "home", "home-name-char")}
-      {renderDualInput("Name", "home", "home-name")}
-      {renderDualInput("Role / Tagline", "home", "home-back")}
+      <h3>{t("admin.home.hero")}</h3>
+      {renderDualInput(t("admin.home.title"), "home", "home-title")}
+      {renderDualInput(t("admin.home.intro"), "home", "home-name-char")}
+      {renderDualInput(t("admin.home.name"), "home", "home-name")}
+      {renderDualInput(t("admin.home.role"), "home", "home-back")}
     </div>
   );
 
   const renderAboutContent = () => (
     <div className="admin__tab-content">
-      <h3>About Me Section</h3>
+      <h3>{t("admin.about.section")}</h3>
       <div className="admin__image-upload" style={{ marginBottom: "2rem" }}>
-        <p>Profile Image: {enData?.about?.image || "Default"}</p>
+        <p>{t("admin.about.profile_image")} {enData?.about?.image || t("admin.about.default")}</p>
         <img
           src={enData?.about?.image && enData.about.image !== "about.image" ? enData.about.image : ProfilePic.src}
           alt="Profile Preview"
@@ -271,12 +273,12 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           }}
         />
       </div>
-      {renderDualInput("Section Title", "about", "title")}
-      {renderDualInput("Bio Description", "about", "description", true)}
-      {renderDualInput("Skills Title", "about", "skills")}
+      {renderDualInput(t("admin.about.title"), "about", "title")}
+      {renderDualInput(t("admin.about.bio"), "about", "description", true)}
+      {renderDualInput(t("admin.about.skills"), "about", "skills")}
 
       <div className="admin__image-upload" style={{ marginTop: "2rem" }}>
-        <p>CV / Resume Document: {enData?.contact?.cv || "/Marwan_cv.pdf"}</p>
+        <p>{t("admin.about.cv")} {enData?.contact?.cv || "/Marwan_cv.pdf"}</p>
         <input
           type="file"
           accept=".pdf,.doc,.docx"
@@ -292,10 +294,11 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
       </div>
 
       <div style={{ marginTop: "2rem" }}>
-        <label className="admin__dual-label">AI & Technical Skills (Select for About Page)</label>
+        <label className="admin__dual-label">{t("admin.about.ai_skills")}</label>
         <TechInput
           technologies={enData?.about?.aiSkills || []}
           options={AI_SKILLS_OPTIONS}
+          placeholder={t("admin.messages.add_tech")}
           onChange={(newTech) => {
             updateTranslation("en", "about", "aiSkills", newTech);
             updateTranslation("ar", "about", "aiSkills", newTech);
@@ -317,7 +320,7 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
               newData[index].title = e.target.value;
               setProjectsData(newData);
             }}
-            placeholder="Title"
+            placeholder={t("admin.projects.title")}
             className="admin__input"
           />
           <textarea
@@ -327,11 +330,12 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
               newData[index].description = e.target.value;
               setProjectsData(newData);
             }}
-            placeholder="Description"
+            placeholder={t("admin.projects.desc")}
             className="admin__input"
           />
           <TechInput
             technologies={project.technologies}
+            placeholder={t("admin.messages.add_tech")}
             onChange={(newTech) => {
               const newData = [...projectsData];
               newData[index].technologies = newTech;
@@ -346,7 +350,7 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
               newData[index].repo = e.target.value;
               setProjectsData(newData);
             }}
-            placeholder="Repo Link"
+            placeholder={t("admin.projects.repo")}
             className="admin__input"
           />
 
@@ -356,13 +360,13 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
               disabled={JSON.stringify(project) === JSON.stringify(originalProjectsData[index])}
               style={{ opacity: JSON.stringify(project) === JSON.stringify(originalProjectsData[index]) ? 0.5 : 1, cursor: JSON.stringify(project) === JSON.stringify(originalProjectsData[index]) ? "not-allowed" : "pointer" }}
               onClick={() => saveProjectData()}
-            >Save Project</button>
+            >{t("admin.projects.save")}</button>
             <button className="admin__btn danger" onClick={() => {
-              if (window.confirm("Are you sure you want to delete this project?")) {
+              if (window.confirm(t("admin.projects.confirm_delete"))) {
                 const newData = projectsData.filter((_, i) => i !== index);
                 saveProjectData(newData);
               }
-            }}>Delete Project</button>
+            }}>{t("admin.projects.delete")}</button>
           </div>
         </div>
       ))}
@@ -380,21 +384,26 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             }]);
           }}
         >
-          + Add New Project
+          {t("admin.projects.add")}
         </button>
       </div>
     </div>
   );
 
   if (loading || !enData || !arData) {
-    return <div className="admin__container">Loading...</div>;
+    return (
+      <div className="admin__loading-container" style={{ color: darkMode ? "#db6db8" : "#3c0753" }}>
+        <div className="admin__loader"></div>
+        <p>{t("admin.messages.loading")}</p>
+      </div>
+    );
   }
 
   return (
-    <div className="admin__container">
+    <div className="admin__container" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className="glass-card admin__main-card">
         <div className="admin__header">
-          <h1>Admin Dashboard</h1>
+          <h1>{t("admin.dashboard")}</h1>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <span
               onClick={toggleDarkMode}
@@ -403,7 +412,7 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
               {darkMode ? <LightMode /> : <DarkMode />}
             </span>
             <Link href="/" className="admin__btn">
-              Back To Website
+              {t("admin.back")}
             </Link>
           </div>
         </div>
@@ -413,19 +422,19 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             className={activeTab === "home" ? "active" : ""}
             onClick={() => setActiveTab("home")}
           >
-            Home Content
+            {t("admin.tabs.home")}
           </button>
           <button
             className={activeTab === "about" ? "active" : ""}
             onClick={() => setActiveTab("about")}
           >
-            About Content
+            {t("admin.tabs.about")}
           </button>
           <button
             className={activeTab === "projects" ? "active" : ""}
             onClick={() => setActiveTab("projects")}
           >
-            Projects Grid
+            {t("admin.tabs.projects")}
           </button>
         </div>
 
@@ -438,7 +447,7 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
         <div className="admin__footer">
           {message && <span className="admin__message">{message}</span>}
           {activeTab !== "projects" && (
-            <button className="admin__btn primary large" onClick={saveData}>Save All Changes</button>
+            <button className="admin__btn primary large" onClick={saveData}>{t("admin.messages.save_all")}</button>
           )}
         </div>
       </div>

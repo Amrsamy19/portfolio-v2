@@ -29,5 +29,51 @@
     "message": "Message",
     "send": "Send Message",
     "cv": "/Marwan_cv.pdf"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "back": "Back To Website",
+    "tabs": {
+      "home": "Home Content",
+      "about": "About Content",
+      "projects": "Projects Grid"
+    },
+    "home": {
+      "hero": "Hero Section",
+      "title": "Title / Greeting",
+      "intro": "Intro (I'm)",
+      "name": "Name",
+      "role": "Role / Tagline"
+    },
+    "about": {
+      "section": "About Me Section",
+      "profile_image": "Profile Image:",
+      "default": "Default",
+      "title": "Section Title",
+      "bio": "Bio Description",
+      "skills": "Skills Title",
+      "cv": "CV / Resume Document:",
+      "ai_skills": "AI & Technical Skills (Select for About Page)"
+    },
+    "projects": {
+      "title": "Title",
+      "desc": "Description",
+      "repo": "Repo Link",
+      "save": "Save Project",
+      "delete": "Delete Project",
+      "confirm_delete": "Are you sure you want to delete this project?",
+      "add": "+ Add New Project"
+    },
+    "messages": {
+      "save_all": "Save All Changes",
+      "saving": "Saving...",
+      "saved": "Saved successfully!",
+      "error": "Error saving",
+      "saving_proj": "Saving Projects...",
+      "saved_proj": "Projects saved successfully!",
+      "error_proj": "Error saving projects",
+      "loading": "Loading...",
+      "add_tech": "Add Tech Skill and press Enter..."
+    }
   }
 }
