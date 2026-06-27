@@ -366,20 +366,22 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           </div>
         </div>
       ))}
-      <div
-        className="admin__project-card glass-card admin__add-project"
-        onClick={() => {
-          setProjectsData([...projectsData, {
-            id: Date.now().toString(),
-            title: "New Project",
-            description: "",
-            technologies: [],
-            repo: "",
-            link: ""
-          }]);
-        }}
-      >
-        <button className="admin__btn primary">+ Add New Project</button>
+      <div className="admin__project-card glass-card admin__add-project">
+        <button 
+          className="admin__btn primary"
+          onClick={() => {
+            setProjectsData([...projectsData, {
+              id: Date.now().toString(),
+              title: "New Project",
+              description: "",
+              technologies: [],
+              repo: "",
+              link: ""
+            }]);
+          }}
+        >
+          + Add New Project
+        </button>
       </div>
     </div>
   );
