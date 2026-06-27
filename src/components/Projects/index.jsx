@@ -10,12 +10,19 @@ export const Projects = () => {
   const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/data?type=projects')
       .then(res => res.json())
-      .then(data => setProjects(data))
-      .catch(console.error);
+      .then(data => {
+        setProjects(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -39,14 +46,24 @@ export const Projects = () => {
 
       <LayoutGroup>
         <div className="projects__grid">
-          {projects.map((project, index) => (
-            <ProjectCard
-              key={project.id || project.title || index}
-              project={project}
-              index={index}
-              onOpen={() => setActiveIndex(index)}
-            />
-          ))}
+          {loading ? (
+             <p style={{ textAlign: "center", width: "100%", color: "#db6db8", fontSize: "1.2rem", padding: "2rem 0" }}>
+               Loading...
+             </p>
+          ) : projects.length > 0 ? (
+            projects.map((project, index) => (
+              <ProjectCard
+                key={project.id || project.title || index}
+                project={project}
+                index={index}
+                onOpen={() => setActiveIndex(index)}
+              />
+            ))
+          ) : (
+             <p style={{ textAlign: "center", width: "100%", color: "#b0b0b0", fontStyle: "italic", fontSize: "1.2rem", padding: "2rem 0" }}>
+               No projects added yet.
+             </p>
+          )}
         </div>
 
         {activeIndex !== null && projects[activeIndex] && (
