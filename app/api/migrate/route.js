@@ -6,7 +6,10 @@ import path from 'path';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 
-const pool = new Pool({ connectionString: process.env.PRISMA_DATABASE_URL });
+export const dynamic = 'force-dynamic';
+
+const connectionString = process.env.PRISMA_DATABASE_URL || "postgres://dummy:dummy@dummy/dummy";
+const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
