@@ -100,7 +100,7 @@ export const Contact = ({ darkMode }) => {
           </Link>
 
           <Link
-            href="/Marwan_cv.pdf"
+            href={t("contact.cv")}
             download="Marwan_Ragab_CV.pdf"
             className="contact__social-btn"
             target="_blank"

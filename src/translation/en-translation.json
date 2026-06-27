@@ -27,6 +27,7 @@
     "name": "Name",
     "email": "Email",
     "message": "Message",
-    "send": "Send Message"
+    "send": "Send Message",
+    "cv": "/Marwan_cv.pdf"
   }
 }
