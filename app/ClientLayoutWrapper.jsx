@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 "use client";
-
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../Theme";
 import { useTranslation } from "react-i18next";
 
@@ -24,7 +23,9 @@ export function ClientLayoutWrapper({ children }) {
 
   return (
     <div className={`App ${themeClass} ${langClass}`}>
-      {children}
+      <React.Suspense fallback={<div style={{height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "white"}}>Loading...</div>}>
+        {children}
+      </React.Suspense>
     </div>
   );
 }

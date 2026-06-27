@@ -1,10 +1,10 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import Arabic from "./src/translation/ar-translation.json";
-import English from "./src/translation/en-translation.json";
+import HttpApi from "i18next-http-backend";
 
 i18n
+	.use(HttpApi)
 	.use(LanguageDetector)
 	.use(initReactI18next)
 	.init({
@@ -13,13 +13,10 @@ i18n
 		interpolation: {
 			escapeValue: false,
 		},
-		resources: {
-			ar: {
-				translation: Arabic,
-			},
-			en: {
-				translation: English,
-			},
+		backend: {
+			loadPath: typeof window !== 'undefined' 
+        ? '/api/data?type={{lng}}-translation' 
+        : 'http://localhost:3000/api/data?type={{lng}}-translation',
 		},
 	});
 
