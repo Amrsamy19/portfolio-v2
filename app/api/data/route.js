@@ -1,17 +1,16 @@
-import { Buffer } from 'buffer';
+import { NextResponse } from 'next/server';
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
-  },
-};
+export async function GET(request) {
+  const type = request.headers.get('x-data-type');
+  return handleDataRequest('GET', type, null);
+}
 
-export default async function handler(req, res) {
-  const { method, headers, body } = req;
-  const type = method === 'GET' ? headers['x-data-type'] : body?.type;
+export async function POST(request) {
+  const body = await request.json();
+  return handleDataRequest('POST', body.type, body.content);
+}
 
+async function handleDataRequest(method, type, contentBody) {
   let filePath = '';
   if (type === 'projects') {
     filePath = 'src/data/projects.json';
@@ -20,29 +19,30 @@ export default async function handler(req, res) {
   } else if (type === 'ar-translation') {
     filePath = 'src/translation/ar-translation.json';
   } else {
-    return res.status(400).json({ error: 'Invalid type' });
+    return NextResponse.json({ error: 'Invalid type' }, { status: 400 });
   }
 
   const token = process.env.GITHUB_TOKEN;
   const owner = process.env.GITHUB_OWNER || 'Amrsamy19';
   const repo = process.env.GITHUB_REPO || 'portfolio-v2';
-  const branch = process.env.GITHUB_BRANCH || 'master'; // default to master
+  const branch = process.env.GITHUB_BRANCH || 'master';
 
   if (method === 'GET') {
     try {
       if (!token) {
-        // Fallback for local development if Vite middleware doesn't intercept
         const fs = await import('fs');
         const path = await import('path');
         const localPath = path.resolve(process.cwd(), filePath);
         if (fs.existsSync(localPath)) {
           const data = fs.readFileSync(localPath, 'utf-8');
-          return res.status(200).send(data);
+          return new NextResponse(data, {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          });
         }
-        return res.status(404).json({ error: 'File not found locally and no GITHUB_TOKEN provided.' });
+        return NextResponse.json({ error: 'File not found locally and no GITHUB_TOKEN provided.' }, { status: 404 });
       }
 
-      // Fetch from GitHub directly to get freshest data
       const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${branch}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -53,25 +53,25 @@ export default async function handler(req, res) {
 
       if (!response.ok) {
         const errorText = await response.text();
-        return res.status(response.status).json({ error: 'Failed to fetch from GitHub', details: errorText });
+        return NextResponse.json({ error: 'Failed to fetch from GitHub', details: errorText }, { status: response.status });
       }
 
       const text = await response.text();
-      res.setHeader('Content-Type', 'application/json');
-      return res.status(200).send(text);
-
+      return new NextResponse(text, {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     } catch (err) {
-      return res.status(500).json({ error: err.message });
+      return NextResponse.json({ error: err.message }, { status: 500 });
     }
   }
 
   if (method === 'POST') {
     if (!token) {
-      return res.status(500).json({ error: 'GITHUB_TOKEN is missing. Cannot save changes in production.' });
+      return NextResponse.json({ error: 'GITHUB_TOKEN is missing. Cannot save changes in production.' }, { status: 500 });
     }
 
     try {
-      // 1. Get current file to get the SHA
       let sha = null;
       const getFileResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${branch}`, {
         headers: {
@@ -86,8 +86,7 @@ export default async function handler(req, res) {
         sha = fileData.sha;
       }
 
-      // 2. Commit the new file
-      const contentBase64 = Buffer.from(JSON.stringify(body.content, null, 2)).toString('base64');
+      const contentBase64 = Buffer.from(JSON.stringify(contentBody, null, 2)).toString('base64');
       
       const commitResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
         method: 'PUT',
@@ -107,14 +106,14 @@ export default async function handler(req, res) {
 
       if (!commitResponse.ok) {
         const errorText = await commitResponse.text();
-        return res.status(commitResponse.status).json({ error: 'Failed to commit to GitHub', details: errorText });
+        return NextResponse.json({ error: 'Failed to commit to GitHub', details: errorText }, { status: commitResponse.status });
       }
 
-      return res.status(200).json({ success: true });
+      return NextResponse.json({ success: true }, { status: 200 });
     } catch (err) {
-      return res.status(500).json({ error: err.message });
+      return NextResponse.json({ error: err.message }, { status: 500 });
     }
   }
 
-  return res.status(405).json({ error: 'Method not allowed' });
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 }

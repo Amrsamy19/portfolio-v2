@@ -1,6 +1,7 @@
+"use client";
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { LightMode, DarkMode } from "@mui/icons-material";
 import ProfilePic from "../../assets/me-about.jpeg";
 import "./index.css";
@@ -420,3 +421,4 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
     </div>
   );
 };
+

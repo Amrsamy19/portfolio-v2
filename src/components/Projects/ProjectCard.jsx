@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -105,3 +106,4 @@ export const ProjectCard = ({ project, onOpen }) => {
     </motion.article>
   );
 };
+

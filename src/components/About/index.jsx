@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable react/prop-types */
 //TODO: Fix dark mode on this part
 
@@ -90,3 +91,4 @@ export const About = () => {
     </section>
   );
 };
+

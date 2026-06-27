@@ -1,10 +1,10 @@
+"use client";
 /* eslint-disable react/prop-types */
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { GitHub, LinkedIn, Person } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { toast } from "react-toastify";
-import CV from "../../assets/Marwan cv.pdf";
 import Link from "@mui/material/Link";
 import emailjs from "@emailjs/browser";
 import "react-toastify/dist/ReactToastify.css";
@@ -100,7 +100,7 @@ export const Contact = ({ darkMode }) => {
           </Link>
 
           <Link
-            href={CV}
+            href="/Marwan_cv.pdf"
             download="Marwan_Ragab_CV.pdf"
             className="contact__social-btn"
             target="_blank"

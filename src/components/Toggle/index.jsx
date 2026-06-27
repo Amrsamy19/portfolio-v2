@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable react/prop-types */
 import { styled } from "@mui/material/styles";
 import { Button } from "@mui/material";
@@ -74,3 +75,4 @@ const LanguageButton = styled(Button)((props) => ({
 }));
 
 export { ThemeToggle, LanguageButton };
+

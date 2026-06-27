@@ -1,21 +1,10 @@
-import { Buffer } from 'buffer';
+import { NextResponse } from 'next/server';
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
-  },
-};
+export async function POST(request) {
+  const { filename, base64 } = await request.json();
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const { filename, base64 } = req.body;
   if (!filename || !base64) {
-    return res.status(400).json({ error: 'Missing filename or base64' });
+    return NextResponse.json({ error: 'Missing filename or base64' }, { status: 400 });
   }
 
   const token = process.env.GITHUB_TOKEN;
@@ -25,11 +14,10 @@ export default async function handler(req, res) {
   const filePath = `public/projects/${filename}`;
 
   if (!token) {
-    return res.status(500).json({ error: 'GITHUB_TOKEN is missing. Cannot upload image in production.' });
+    return NextResponse.json({ error: 'GITHUB_TOKEN is missing. Cannot upload image in production.' }, { status: 500 });
   }
 
   try {
-    // Check if file exists to get SHA
     let sha = null;
     const getFileResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${branch}`, {
       headers: {
@@ -44,7 +32,6 @@ export default async function handler(req, res) {
       sha = fileData.sha;
     }
 
-    // Prepare content (strip data:image/png;base64, if present)
     const base64Data = base64.includes(',') ? base64.split(',')[1] : base64;
 
     const commitResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
@@ -65,11 +52,11 @@ export default async function handler(req, res) {
 
     if (!commitResponse.ok) {
       const errorText = await commitResponse.text();
-      return res.status(commitResponse.status).json({ error: 'Failed to upload to GitHub', details: errorText });
+      return NextResponse.json({ error: 'Failed to upload to GitHub', details: errorText }, { status: commitResponse.status });
     }
 
-    return res.status(200).json({ success: true, path: `/projects/${filename}` });
+    return NextResponse.json({ success: true, path: `/projects/${filename}` }, { status: 200 });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

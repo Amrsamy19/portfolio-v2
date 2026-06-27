@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { LayoutGroup } from "framer-motion";
 import "./index.css";
@@ -55,3 +56,4 @@ export const Projects = () => {
     </section>
   );
 };
+

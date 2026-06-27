@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable react/prop-types */
 import { createContext, useState } from "react";
 

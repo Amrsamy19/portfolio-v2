@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -146,3 +147,4 @@ export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
     </AnimatePresence>
   );
 };
+
