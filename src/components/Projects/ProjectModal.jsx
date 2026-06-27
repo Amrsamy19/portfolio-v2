@@ -1,33 +1,20 @@
 "use client";
 /* eslint-disable react/prop-types */
-import { useEffect, useState, useCallback } from "react";
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Close, GitHub } from "@mui/icons-material";
+import { Close, GitHub } from "@mui/icons-material";
 
 export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
-  const [[imageIndex, direction], setImageIndex] = useState([0, 0]);
-  const images = project.images;
-
-  const paginate = useCallback((newDirection) => {
-    setImageIndex(([prev]) => [
-      (prev + newDirection + images.length) % images.length,
-      newDirection,
-    ]);
-  }, [images.length]);
-
-  const nextImage = useCallback(() => paginate(1), [paginate]);
-  const prevImage = useCallback(() => paginate(-1), [paginate]);
-
   // Keyboard controls
   useEffect(() => {
     const handler = (e) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") nextImage();
-      if (e.key === "ArrowLeft") prevImage();
+      if (e.key === "ArrowRight") onNext();
+      if (e.key === "ArrowLeft") onPrev();
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [onClose, nextImage, prevImage]);
+  }, [onClose, onNext, onPrev]);
 
   // Prevent body scroll
   useEffect(() => {
@@ -36,24 +23,6 @@ export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
       document.body.style.overflow = "unset";
     };
   }, []);
-
-  const imageVariants = {
-    enter: (direction) => ({
-      x: direction > 0 ? 300 : -300,
-      opacity: 0,
-      scale: 0.9,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-    },
-    exit: (direction) => ({
-      x: direction < 0 ? 300 : -300,
-      opacity: 0,
-      scale: 0.9,
-    }),
-  };
 
   return (
     <AnimatePresence mode="wait">
@@ -72,40 +41,6 @@ export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
         >
-          {/* Image Carousel */}
-          <div className="modal__image-container">
-            <AnimatePresence initial={false} custom={direction} mode="wait">
-              <motion.img
-                key={imageIndex}
-                src={images[imageIndex]}
-                alt={`${project.title}`}
-                className="modal__image"
-                custom={direction}
-                variants={imageVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-              />
-            </AnimatePresence>
-
-            {images.length > 1 && (
-              <div className="modal__counter">
-                {imageIndex + 1} / {images.length}
-              </div>
-            )}
-
-            {images.length > 1 && (
-              <>
-                <button className="modal__nav prev" onClick={prevImage}>
-                  <ChevronLeft />
-                </button>
-                <button className="modal__nav next" onClick={nextImage}>
-                  <ChevronRight />
-                </button>
-              </>
-            )}
-          </div>
-
           <button className="modal__close" onClick={onClose}>
             <Close />
           </button>
@@ -147,4 +82,3 @@ export const ProjectModal = ({ project, onClose, onNext, onPrev }) => {
     </AnimatePresence>
   );
 };
-

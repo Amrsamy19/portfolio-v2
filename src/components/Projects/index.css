@@ -64,25 +64,13 @@
 
 .projects__grid {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1000px;
   padding: 0 2rem;
 
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
   perspective: 1000px;
-}
-
-@media (min-width: 768px) {
-  .projects__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .projects__grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 /* =========================
@@ -366,7 +354,6 @@
 
   .projects__grid {
     gap: 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 
   .modal__content {

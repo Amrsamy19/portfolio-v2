@@ -14,7 +14,7 @@
 }
 
 .about__body-text {
-  text-align: justify;
+  text-align: start;
   line-height: 1.8;
   font-size: 1.1rem;
   margin-bottom: 2rem;

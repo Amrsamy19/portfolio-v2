@@ -312,33 +312,7 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             placeholder="Repo Link"
             className="admin__input"
           />
-          <div className="admin__image-upload">
-            <p>Image: {project.images && project.images[0] ? project.images[0] : "None"}</p>
-            {project.images && project.images[0] ? (
-              <img
-                src={project.images[0]}
-                alt="Project Preview"
-                style={{ width: "100%", maxHeight: "150px", objectFit: "cover", borderRadius: "8px", marginBottom: "1rem" }}
-              />
-            ) : (
-              <div style={{ width: "100%", height: "150px", background: "rgba(255,255,255,0.05)", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem", border: "1px dashed rgba(255,255,255,0.2)" }}>
-                <span style={{ opacity: 0.5 }}>No Image Available</span>
-              </div>
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                if (e.target.files[0]) {
-                  handleUploadImage(e.target.files[0], (path) => {
-                    const newData = [...projectsData];
-                    newData[index].images = [path];
-                    setProjectsData(newData);
-                  });
-                }
-              }}
-            />
-          </div>
+
           <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
             <button className="admin__btn primary" onClick={saveData}>Save Project</button>
             <button className="admin__btn danger" onClick={() => {
@@ -356,8 +330,7 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             description: "",
             technologies: [],
             repo: "",
-            link: "",
-            images: []
+            link: ""
           }]);
         }}>+ Add New Project</button>
       </div>
