@@ -7,8 +7,8 @@ import ProfilePic from "../../assets/me-about.jpeg";
 import "./index.css";
 
 const TECH_OPTIONS = [
-  "React", "Javascript", "TypeScript", "HTML5", "CSS3", "Java", 
-  "C", "C++", "Python", "Kotlin", "Node.js", "Express", "MongoDB", 
+  "React", "Javascript", "TypeScript", "HTML5", "CSS3", "Java",
+  "C", "C++", "Python", "Kotlin", "Node.js", "Express", "MongoDB",
   "PyTorch", "TensorFlow", "Machine Learning", "AI", "Preact"
 ];
 
@@ -22,8 +22,8 @@ const TechInput = ({ technologies, onChange, options = TECH_OPTIONS }) => {
   const [inputValue, setInputValue] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const filteredOptions = options.filter(tech => 
-    tech.toLowerCase().includes(inputValue.toLowerCase()) && 
+  const filteredOptions = options.filter(tech =>
+    tech.toLowerCase().includes(inputValue.toLowerCase()) &&
     !technologies.includes(tech)
   );
 
@@ -71,8 +71,8 @@ const TechInput = ({ technologies, onChange, options = TECH_OPTIONS }) => {
         {showDropdown && filteredOptions.length > 0 && (
           <div className="admin__custom-dropdown">
             {filteredOptions.map((option, i) => (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className="admin__dropdown-item"
                 onMouseDown={() => handleAdd(option)}
               >
@@ -274,7 +274,7 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
       {renderDualInput("Section Title", "about", "title")}
       {renderDualInput("Bio Description", "about", "description", true)}
       {renderDualInput("Skills Title", "about", "skills")}
-      
+
       <div className="admin__image-upload" style={{ marginTop: "2rem" }}>
         <p>CV / Resume Document: {enData?.contact?.cv || "/Marwan_cv.pdf"}</p>
         <input
@@ -290,16 +290,16 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           }}
         />
       </div>
-      
+
       <div style={{ marginTop: "2rem" }}>
         <label className="admin__dual-label">AI & Technical Skills (Select for About Page)</label>
-        <TechInput 
-          technologies={enData?.about?.aiSkills || []} 
+        <TechInput
+          technologies={enData?.about?.aiSkills || []}
           options={AI_SKILLS_OPTIONS}
           onChange={(newTech) => {
             updateTranslation("en", "about", "aiSkills", newTech);
             updateTranslation("ar", "about", "aiSkills", newTech);
-          }} 
+          }}
         />
       </div>
     </div>
@@ -330,13 +330,13 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
             placeholder="Description"
             className="admin__input"
           />
-          <TechInput 
-            technologies={project.technologies} 
+          <TechInput
+            technologies={project.technologies}
             onChange={(newTech) => {
               const newData = [...projectsData];
               newData[index].technologies = newTech;
               setProjectsData(newData);
-            }} 
+            }}
           />
           <input
             type="text"
@@ -351,8 +351,8 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           />
 
           <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
-            <button 
-              className="admin__btn primary" 
+            <button
+              className="admin__btn primary"
               disabled={JSON.stringify(project) === JSON.stringify(originalProjectsData[index])}
               style={{ opacity: JSON.stringify(project) === JSON.stringify(originalProjectsData[index]) ? 0.5 : 1, cursor: JSON.stringify(project) === JSON.stringify(originalProjectsData[index]) ? "not-allowed" : "pointer" }}
               onClick={() => saveProjectData()}
@@ -366,9 +366,8 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           </div>
         </div>
       ))}
-      <div 
+      <div
         className="admin__project-card glass-card admin__add-project"
-        style={{ cursor: "pointer" }}
         onClick={() => {
           setProjectsData([...projectsData, {
             id: Date.now().toString(),
