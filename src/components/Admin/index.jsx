@@ -89,6 +89,7 @@ const TechInput = ({ technologies, onChange, options = TECH_OPTIONS }) => {
 export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
   const [activeTab, setActiveTab] = useState(() => sessionStorage.getItem("adminActiveTab") || "home");
   const [projectsData, setProjectsData] = useState([]);
+  const [originalProjectsData, setOriginalProjectsData] = useState([]);
   const [enData, setEnData] = useState(null);
   const [arData, setArData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -110,7 +111,9 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
         fetch("/api/data", { headers: { "x-data-type": "en-translation" } }),
         fetch("/api/data", { headers: { "x-data-type": "ar-translation" } })
       ]);
-      setProjectsData(await projRes.json());
+      const projJson = await projRes.json();
+      setProjectsData(projJson);
+      setOriginalProjectsData(JSON.parse(JSON.stringify(projJson)));
       setEnData(await enRes.json());
       setArData(await arRes.json());
     } catch (err) {
@@ -142,6 +145,24 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
       setTimeout(() => setMessage(""), 3000);
     } catch (err) {
       setMessage("Error saving");
+      console.error(err);
+    }
+  };
+
+  const saveProjectData = async (newProjects = projectsData) => {
+    setMessage("Saving Projects...");
+    try {
+      await fetch("/api/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "projects", content: newProjects }),
+      });
+      setProjectsData(newProjects);
+      setOriginalProjectsData(JSON.parse(JSON.stringify(newProjects)));
+      setMessage("Projects saved successfully!");
+      setTimeout(() => setMessage(""), 3000);
+    } catch (err) {
+      setMessage("Error saving projects");
       console.error(err);
     }
   };
@@ -314,10 +335,17 @@ export const AdminDashboard = ({ darkMode, toggleDarkMode }) => {
           />
 
           <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
-            <button className="admin__btn primary" onClick={saveData}>Save Project</button>
+            <button 
+              className="admin__btn primary" 
+              disabled={JSON.stringify(project) === JSON.stringify(originalProjectsData[index])}
+              style={{ opacity: JSON.stringify(project) === JSON.stringify(originalProjectsData[index]) ? 0.5 : 1, cursor: JSON.stringify(project) === JSON.stringify(originalProjectsData[index]) ? "not-allowed" : "pointer" }}
+              onClick={() => saveProjectData()}
+            >Save Project</button>
             <button className="admin__btn danger" onClick={() => {
-              const newData = projectsData.filter((_, i) => i !== index);
-              setProjectsData(newData);
+              if (window.confirm("Are you sure you want to delete this project?")) {
+                const newData = projectsData.filter((_, i) => i !== index);
+                saveProjectData(newData);
+              }
             }}>Delete Project</button>
           </div>
         </div>
