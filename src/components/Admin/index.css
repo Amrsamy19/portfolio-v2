@@ -28,6 +28,18 @@
   margin: 0;
 }
 
+/* Ensure the fixed sidebar navbar never overlaps admin page */
+.admin__container ~ .navbar,
+.App:has(.admin__container) .navbar {
+  display: none !important;
+}
+
+/* Admin header controls always on top */
+.admin__header > div {
+  position: relative;
+  z-index: 1100;
+}
+
 .admin__tabs {
   display: flex;
   gap: 1rem;
